@@ -12,12 +12,10 @@ export const OnRampTransactions = ({
     transactions: {
         time: Date,
         amount: number,
-        // TODO: Can the type of `status` be more specific?
         status: OnRampStatus | string,
         provider: string
     }[]
 }) => {
-    console.log(transactions);
     if (!transactions.length) {
         return <Card title="Recent Transactions">
             <div className="text-center pb-8 pt-8">

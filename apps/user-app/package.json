@@ -9,6 +9,7 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@radix-ui/themes": "^3.1.3",
     "@repo/store": "*",
     "@repo/ui": "*",
     "@types/bcrypt": "^5.0.2",

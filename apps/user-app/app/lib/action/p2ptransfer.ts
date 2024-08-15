@@ -23,8 +23,9 @@ export async function p2ptransfer(tonumber: string, amount: number) {
       message: "User not found",
     };
   }
-
+  const value = Number(fromuserId)
   await prisma.$transaction(async (tnx) => {
+    await tnx.$queryRaw`SELECT * from "Balance" WHERE "userId" = ${value} FOR UPDATE`
     const fromBalance = await tnx.balance.findUnique({
       where: {
         userId: Number(fromuserId),
@@ -48,5 +49,14 @@ export async function p2ptransfer(tonumber: string, amount: number) {
       where: { userId: toUser.id },
       data: { amount: { increment: amount } },
     });
+    
+    await tnx.p2pTransfer.create({
+      data:{
+        fromUserId:Number(fromuserId),
+        toUserId:toUser.id,
+        amount,
+        timeStamp:new Date()
+      }
+    })
   });
 }
