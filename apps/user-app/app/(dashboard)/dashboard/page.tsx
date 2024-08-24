@@ -2,6 +2,6 @@
 export default function() {
     return <div>
         Dashboard 
-        <div >                    hello      </div>
+        <div >                    hello   from dashboard   </div>
     </div>
 }
