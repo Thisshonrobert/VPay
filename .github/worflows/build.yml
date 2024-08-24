@@ -1,0 +1,28 @@
+#CI PIPELINE FILE
+
+name: Build Succeeds on PR
+
+on:
+  pull_request:
+   branches:
+      - main
+
+jobs:
+  build:
+    name: Build the Project
+    runs-on: ubuntu-latest
+    steps:
+      - uses : actions/checkout@v3  # Step 1 - clones the repository
+      - name : Use Node.js          # Step 2 - install node.js on  the machine
+        uses : actions/setup-node@v3
+        with :
+          node-version : '20'
+
+      - name : Install Dependencies   # Step 3 - install the dependency
+        run  : npm install
+      
+      - name : Generate Prisma client  # Step 4 - Generate prisma client
+        run  : npm run db:generate
+
+      - name : Run Build              # Step 5 - build 
+        run  : npm run build

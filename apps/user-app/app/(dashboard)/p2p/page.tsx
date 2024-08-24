@@ -1,11 +1,8 @@
-import React from 'react'
-import {SendCard} from "../../../components/SendCard"
-import { Card,Box } from '@radix-ui/themes'
-import { Center } from '@repo/ui/center'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '../../lib/auth'
 import prisma from '@repo/db/client'
+import { getServerSession } from 'next-auth'
 import P2pTransactions from '../../../components/P2pTransactions'
+import { SendCard } from "../../../components/SendCard"
+import { authOptions } from '../../lib/auth'
 
 async function Calculatep2p() {
   const session = await getServerSession(authOptions);
@@ -14,10 +11,10 @@ async function Calculatep2p() {
     where: {
       OR: [
         {
-          fromUserId: Number(session.user.id),
+          fromUserId: Number(session?.user.id),
         },
         {
-          toUserId: Number(session.user.id),
+          toUserId: Number(session?.user.id),
         },
       ],
     },
@@ -32,7 +29,7 @@ async function Calculatep2p() {
     amount: t.amount,
     senderName: t.fromUser.name!, 
     recieverName: t.toUser.name!,     
-    direction: t.fromUserId === Number(session.user.id) ? 'Sent' : 'Received',
+    direction: t.fromUserId === Number(session!.user.id) ? 'Sent' : 'Received',
   }));
 }
 
@@ -42,7 +39,7 @@ const page = async() => {
     <div className="w-full flex flex-row justify-center gap-10">
       
       <SendCard/>
-      <div className="w-1/2">
+      <div className="w-1/3 mt-36">
         
       <P2pTransactions transactions={transactions} />
       

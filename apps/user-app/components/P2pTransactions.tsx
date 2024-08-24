@@ -1,5 +1,4 @@
-import { Card, Text } from "@radix-ui/themes";
-import React from "react";
+import { Card, Heading, Text } from "@radix-ui/themes";
 
 const P2pTransactions = ({
   transactions,
@@ -23,17 +22,19 @@ const P2pTransactions = ({
     );
   }
   return (
+    
     <Card className="p-4 bg-white shadow-md rounded-lg w-full" title="Recent Transactions">
-      <div className="grid grid-cols-3 gap-4">
+      <div >
+        <Heading as="h3">Transactions</Heading>
         {transactions.map((t) => (
-          <div className="flex flex-col py-2 space-y-2" key={t.time.toISOString()}>
-            <div>
+          <div className="flex justify-between py-2 space-y-2" key={t.time.toISOString()}>
+            <div className="flex flex-col">
               <Text className="text-md">{t.direction} INR</Text>
               <Text className="text-slate-600 text-md">
                 {t.time.toDateString()}
               </Text>
             </div>
-            <div className="text-sm">
+            <div className="text-md ">
               {t.direction === "Sent"
                 ? "to " + t.recieverName
                 : "from " + t.senderName}
@@ -47,6 +48,7 @@ const P2pTransactions = ({
         ))}
       </div>
     </Card>
+   
   );
 };
 

@@ -7,7 +7,7 @@ import prisma from "@repo/db/client";
 export async function CreateOnRampTxn(provider: string, amount: number) {
   const session = await getServerSession(authOptions);
   const token = (Math.random()*1000).toString(); // this should come from a banking api
-  const userId = session.user.id;
+  const userId = session!.user.id;
 
   if (!userId) {
     return {

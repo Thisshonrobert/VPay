@@ -5,7 +5,7 @@ import prisma from "@repo/db/client";
 
 export async function p2ptransfer(tonumber: string, amount: number) {
   const session = await getServerSession(authOptions);
-  const fromuserId = session.user.id;
+  const fromuserId = session?.user.id;
 
   if (!fromuserId) {
     return {
