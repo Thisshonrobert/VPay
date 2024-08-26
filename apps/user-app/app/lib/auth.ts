@@ -68,7 +68,12 @@ export const authOptions:NextAuthOptions = {
     ],
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
-        
+        async redirect({ url, baseUrl }: { url: string; baseUrl: string }): Promise<string> {
+            // Ensure a string is always returned
+            return url.startsWith(baseUrl)
+              ? url
+              : process.env.NEXTAUTH_URL || baseUrl;
+          },
         async session({ token, session }: {token:JWT,session:Session}) {
             session.user.id = token.sub //token.sub typically represents the user's ID in the JWT.
 
