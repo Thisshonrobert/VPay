@@ -3,7 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "pipeline": {
     "build": {
-      "env": ["JWT_SECRET", "DATABASE_URL"],
+      "env": ["JWT_SECRET", "DATABASE_URL","NEXTAUTH_URL"],
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
