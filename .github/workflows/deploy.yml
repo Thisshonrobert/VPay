@@ -39,4 +39,4 @@ jobs:
           sudo docker pull thisshon/v-pay:latest
           sudo docker stop user-app || true
           sudo docker rm user-app || true
-          sudo docker run -e DATABASE_URL ${{ secrets.DATABASE_URL}} -d --name user-app -p 3005:3000 thisshon/v-pay:latest
+          sudo docker run --env DATABASE_URL="${{ secrets.DATABASE_URL }}" -d --name user-app -p 3005:3000 --restart unless-stopped thisshon/v-pay:latest
