@@ -1,5 +1,5 @@
 {
-  "name": "week-18",
+  "name": "@thisshonrobert/v-pay",
   "private": true,
   "scripts": {
     "build": "turbo build",
