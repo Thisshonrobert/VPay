@@ -1,5 +1,5 @@
 import 'ui/styles/global.css'
-
+import '@radix-ui/themes/styles.css';
 import type { Metadata } from "next";
 import { Providers } from "../provider";
 import { AppbarClient } from "../components/AppbarClient";
