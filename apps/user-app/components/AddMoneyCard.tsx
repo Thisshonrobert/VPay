@@ -1,8 +1,7 @@
 "use client"
-import { Button } from "@repo/ui/button";
-import { Card } from "@repo/ui/card";
-import { Select } from "@repo/ui/select";
-import { TextInput } from "@repo/ui/textinput";
+
+import { Button, Card, Select, TextInput } from "ui/prebuilt/index";
+
 import { useState } from "react";
 import { CreateOnRampTxn } from "../app/lib/action/CreateOnRampTxn";
 

@@ -1,4 +1,4 @@
-import { Card } from "@repo/ui/card"
+import { Card } from "ui/prebuilt/index"
 
 export enum OnRampStatus{
     Success = 'Success',

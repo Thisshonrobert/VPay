@@ -1,7 +1,9 @@
+import { Button } from 'ui'
 
 export default function() {
     return <div>
         Dashboard 
-        <div >                    hello   from dashboard 4  </div>
+        <Button>hi</Button>
+        <div className='text-2xl'>hello   from dashboard 4  </div>
     </div>
 }
