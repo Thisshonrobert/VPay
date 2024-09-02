@@ -1,13 +1,16 @@
 import type { Config } from 'tailwindcss';
-
+import { fontFamily } from "tailwindcss/defaultTheme";
 const config: Config = {
   darkMode: ['class'],
   content: [
+    "./**/*.{js,ts,jsx,tsx}",
     './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
     './packages/ui/**/*.{js,ts,jsx,tsx}',
+    "../../packages/**/*.{js,ts,jsx,tsx}",
+    './ui/**/*.{ts,tsx}'
   ],
   prefix: '',
   theme: {
@@ -53,6 +56,9 @@ const config: Config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+      },
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
       },
       borderRadius: {
         lg: 'var(--radius)',

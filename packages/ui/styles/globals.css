@@ -1,4 +1,5 @@
 @import '@radix-ui/themes/styles.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -67,4 +68,7 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+.test-style {
+  background-color: yellow;
 }

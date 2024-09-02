@@ -1,5 +1,5 @@
-import 'ui/styles/global.css'
-
+import  'ui/styles/globals.css'
+// import 'ui/styles/output.css'
 import type { Metadata } from "next";
 import { Providers } from "../provider";
 import { AppbarClient } from "../components/AppbarClient";
