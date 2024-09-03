@@ -23,6 +23,7 @@ model p2pTransfer {
   id         Int      @id @default(autoincrement())
   amount     Int
   timeStamp  DateTime
+  Status     P2pStatus @default(Failure)
   fromUserId Int
   fromUser   User     @relation(name: "FromUserRelation", fields: [fromUserId], references: [id])
   toUserId   Int
@@ -64,4 +65,9 @@ enum OnRampStatus {
   Success
   Failure
   Processing
+}
+
+enum P2pStatus {
+  Success
+  Failure
 }

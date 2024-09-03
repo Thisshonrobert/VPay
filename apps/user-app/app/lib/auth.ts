@@ -17,8 +17,9 @@ export const authOptions:NextAuthOptions = {
       CredentialsProvider({
           name: 'Credentials',
           credentials: {
+            name:{type:"text",required:true},
             phone: { label: "Phone number", type: "text", placeholder: "1231231231", required: true },
-            password: { label: "Password", type: "password", required: true }
+            password: { label: "Password", type: "password", required: true },
           },
         
           async authorize(credentials) {
@@ -27,7 +28,7 @@ export const authOptions:NextAuthOptions = {
             const hashedPassword = await bcrypt.hash(credentials.password, 10);
             const existingUser = await db.user.findFirst({
                 where: {
-                    number: credentials.phone!
+                    number: credentials.phone
                 }
             });
 
@@ -37,7 +38,7 @@ export const authOptions:NextAuthOptions = {
                     return {
                         id: existingUser.id.toString(),
                         name: existingUser.name,
-                        email: existingUser.number
+                        number: existingUser.number
                     }
                 }
                 return null;
@@ -46,6 +47,7 @@ export const authOptions:NextAuthOptions = {
             try {
                 const user = await db.user.create({
                     data: {
+                        name:credentials.name,
                         number: credentials.phone,
                         password: hashedPassword,
                        
@@ -56,23 +58,23 @@ export const authOptions:NextAuthOptions = {
                 return {
                     id: user.id.toString(),
                     name: user.name,
-                    email: user.number
+                    number: user.number
                 }
             } catch(e) {
                 console.error(e);
             }
-
             return null
           },
         })
     ],
+    pages: {
+        signIn: "auth/signin",
+      },
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
         async redirect({ url, baseUrl }: { url: string; baseUrl: string }): Promise<string> {
             // Ensure a string is always returned
-            return url.startsWith(baseUrl)
-              ? url
-              : process.env.NEXTAUTH_URL || baseUrl;
+            return url.startsWith(baseUrl)? url: process.env.NEXTAUTH_URL || baseUrl;
           },
         async session({ token, session }: {token:JWT,session:Session}) {
             session.user.id = token.sub //token.sub typically represents the user's ID in the JWT.

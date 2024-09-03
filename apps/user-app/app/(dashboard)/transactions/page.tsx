@@ -1,6 +1,14 @@
+import { OnRampTransactions } from "@components/OnRampTransactions";
+import getAllOnRampTxn from "../../lib/action/getAllOnRampTxn";
 
-export default function() {
-    return <div>
-        Transactions
-    </div>
+
+export default async function() {
+    const transactions = await getAllOnRampTxn();
+
+    return(
+        <div>
+            
+        </div>
+    )
+        
 }
