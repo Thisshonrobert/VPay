@@ -1,4 +1,4 @@
-import { SidebarItem } from "../../components/SidebarItem";
+import { SidebarItem } from "@components/SidebarItem";
 import { FaAmazonPay } from "react-icons/fa6";
 
 export default function Layout({
@@ -7,7 +7,7 @@ export default function Layout({
   children: React.ReactNode;
 }): JSX.Element {
   return (
-    <div className="flex">
+    <div className="flex bg-pink-50">
         <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-28">
             <div>
                 <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />

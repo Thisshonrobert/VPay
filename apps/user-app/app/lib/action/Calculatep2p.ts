@@ -31,8 +31,8 @@ export async function Calculatep2p() {
     return transactions.map((t) => ({
       time: t.timeStamp,
       amount: t.amount,
-      senderName: t.fromUser.name!, 
-      recieverName: t.toUser.name!,     
+      senderName: t.fromUser.name, 
+      recieverName: t.toUser.name,     
       direction: t.fromUserId === Number(session!.user.id) ? 'Sent' : 'Received',
     }));
   }

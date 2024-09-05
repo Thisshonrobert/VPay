@@ -14,6 +14,9 @@ const OnRamptransactions = await prisma.onRampTransaction.findMany({
     },
     orderBy: {
         startTime: 'desc'
+      },
+      include:{
+        user:true
       }
 })
 const sentTransfers = await prisma.p2pTransfer.findMany({
@@ -22,6 +25,9 @@ const sentTransfers = await prisma.p2pTransfer.findMany({
     },
     orderBy: {
       timeStamp: 'desc'
+    },
+    include:{
+      toUser:true
     }
   });
 
@@ -31,6 +37,9 @@ const sentTransfers = await prisma.p2pTransfer.findMany({
     },
     orderBy: {
       timeStamp: 'desc'
+    },
+    include:{
+      fromUser:true
     }
   });
 
@@ -41,21 +50,24 @@ const Alltransactions = [
         time: t.startTime,
         amount: t.amount,
         status: t.status,
-        provider: t.provider
+        name: t.provider,
+        number:t.user.number
         })),
     ...sentTransfers.map((t)=>({
         time: t.timeStamp,
         amount: t.amount,
-        status: t.Status,
-        toUserId: t.toUserId
+        status: t.Status === "Success"? "Sent":"Failure",
+        name: t.toUser.name,
+        number : t.toUser.number,
     })),
     ...receivedTransfers.map(
         (tx) => 
             ({
-        type: 'p2pReceived',
         time: tx.timeStamp,
         amount: tx.amount,
-        fromUserId: tx.fromUserId
+        status: tx.Status === "Success"? "Received":"Failure",
+        name: tx.fromUser.name,
+        number : tx.fromUser.number
       })
     )    
 ]

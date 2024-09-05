@@ -23,21 +23,26 @@ const P2pTransactions = ({
   }
   return (
     
-    <Card className="p-4 bg-white shadow-md rounded-lg w-full" title="Recent Transactions">
+    <Card className="p-4 bg-white shadow-md rounded-lg w-full " title="Recent Transactions">
       <div >
-        <Heading as="h3">Transactions</Heading>
+        <Heading as="h3">Recent Transactions</Heading>
+        <div className="flex justify-between mt-2">
+        <Heading size='2' as="h6">Sent/Received</Heading>
+        <Heading size='2' as="h6">Username</Heading>
+        <Heading size='2' as="h6">Amount</Heading>
+        </div>
         {transactions.map((t) => (
-          <div className="flex justify-between py-2 space-y-2" key={t.time.toISOString()}>
+          <div className="flex justify-between py-2 space-y-2" key={t.time.toLocaleDateString()}>
             <div className="flex flex-col">
               <Text className="text-md">{t.direction} INR</Text>
               <Text className="text-slate-600 text-md">
-                {t.time.toDateString()}
+                {t.time.toLocaleDateString()}
               </Text>
             </div>
             <div className="text-md ">
               {t.direction === "Sent"
-                ? "to " + t.recieverName
-                : "from " + t.senderName}
+                ?  t.recieverName
+                :  t.senderName}
             </div>
             <div className="text-right">
               <Text className={t.direction === "Sent" ? "text-red-500" : "text-green-500"}>

@@ -1,36 +1,50 @@
 'use client'
 
-import { Container } from '@radix-ui/themes'
+import { useMessage } from 'hooks/useMessage'
 import { signIn } from 'next-auth/react'
-import React, { useRef } from 'react'
-import { Button } from "ui"
+import { useRouter } from 'next/navigation'
+import { useRef, useState } from 'react'
 import {
-  Card,
+  Button, Card,
   CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle, Input, Label
 } from "ui"
-import { Input } from "ui"
-import { Label } from "ui"
 
-export const description =
-  "A simple login form with email and password. The submit button says 'Sign in'."
+
 
 const LoginPage = () => {
     const phone = useRef("");
     const password = useRef("");
     const name =useRef("");
+    const router = useRouter();
+    const [loading,setLoading] = useState(false) //todo:add skeleton while loading
+    const {bark} = useMessage();
 
     const onSubmit = async()=>{
-        await signIn("credentials",{
+      setLoading(true);
+        const response = await signIn("credentials",{
             phone:phone.current,
             password:password.current,
             name:name.current,
-            redirect:true,
+            redirect:false,
             callbackUrl:"/dashboard"
         })
+        if (response?.ok) {
+          router.push("/dashboard");
+          //router.refresh();
+          setLoading(false);
+          bark({ message: "Successfully Logged In", success: true });
+        } else {
+          bark({
+            message: "Unable to login. Please enter valid credentials",
+            success: false,
+          });
+    
+          setLoading(false);
+        }
     }
   return (
     <div className='flex justify-center mt-20'>
@@ -52,7 +66,7 @@ const LoginPage = () => {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input onChange={(e)=>password.current=e.target.value} id="password" type="password" required />
+              <Input onChange={(e)=>password.current=e.target.value} id="password" type="password" placeholder="abc@123" required />
             </div>
           </CardContent>
           <CardFooter>
@@ -65,4 +79,6 @@ const LoginPage = () => {
 }
 
 export default LoginPage
+
+
 

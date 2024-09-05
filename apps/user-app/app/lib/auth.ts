@@ -8,6 +8,8 @@ declare module "next-auth" {
     interface Session {
         user: {
             id: string | undefined;
+            number:String,
+            name:String
         } & DefaultSession["user"];
     }
 }
@@ -68,20 +70,31 @@ export const authOptions:NextAuthOptions = {
         })
     ],
     pages: {
-        signIn: "auth/signin",
+        signIn: '/signin', 
       },
     secret: process.env.JWT_SECRET || "secret",
     callbacks: {
         async redirect({ url, baseUrl }: { url: string; baseUrl: string }): Promise<string> {
-            // Ensure a string is always returned
-            return url.startsWith(baseUrl)? url: process.env.NEXTAUTH_URL || baseUrl;
-          },
+            return url.startsWith(baseUrl) ? url : process.env.NEXTAUTH_URL || baseUrl;
+        },
         async session({ token, session }: {token:JWT,session:Session}) {
-            session.user.id = token.sub //token.sub typically represents the user's ID in the JWT.
-
-            return session
-        }
+            try {
+                const user = await db.user.findFirst({
+                  where: {
+                    id: Number(token.sub)
+                  }
+                });
         
-    }  
-  }
+            session.user.id = token.sub;
+            session.user.number = user.number;
+            session.user.name = user.name; //token.sub typically represents the user's ID in the JWT.
+            return session;
+        }catch(err){
+            console.error("Error in session callback:", err);
+                return session;
+        }
+    }
+}
+}
+
   
