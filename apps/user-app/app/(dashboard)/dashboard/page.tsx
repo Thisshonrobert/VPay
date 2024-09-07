@@ -14,11 +14,35 @@ import {
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import getBalance from "app/lib/action/getBalance";
+import getAllOnRampTxn from "app/lib/action/getAllOnRampTxn";
+import getByMonth from "app/lib/action/getByMonth";
+import { Graph } from "@components/Graph";
 
 
 export default async function() {
     const session = await getServerSession(authOptions);
     const balance = await getBalance();
+    const transactions = await getAllOnRampTxn();
+    const monthlyTxn = await getByMonth();
+    let sentAmt = 0,receivedAmt=0;
+    for(let i=0;i<transactions.length;i++){
+      const t = transactions[i]
+      if(t.status==="Sent")
+        sentAmt+=t.amount;
+      else if(t.status==='Received')
+        receivedAmt+=t.amount;
+    }
+
+    //All can be done by this
+//     const sentAmt = transactions
+//   .filter(t => t.status === "Sent")
+//   .reduce((total, t) => total + t.amount, 0);
+
+// const receivedAmt = transactions
+//   .filter(t => t.status === "Received")
+//   .reduce((total, t) => total + t.amount, 0);
+
+
     if(!session)
         {
          redirect('/signin')
@@ -33,40 +57,40 @@ export default async function() {
           <Card x-chunk="dashboard-01-chunk-0">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Wallet 
+              Sent Amount
               </CardTitle>
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">₹{balance.amount/100}</div>
+              <div className="text-2xl font-bold">₹{sentAmt/100}</div>
               <p className="text-xs text-muted-foreground">
-                +20.1% from last month
+                -amount you sent to peers
               </p>
             </CardContent>
           </Card>
           <Card x-chunk="dashboard-01-chunk-1">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">
-                Sent Amount
+              Received Amount
               </CardTitle>
               <Users className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+2350</div>
+              <div className="text-2xl font-bold">₹{receivedAmt/100}</div>
               <p className="text-xs text-muted-foreground">
-                +180.1% from last month
+                +amount you received from peers 
               </p>
             </CardContent>
           </Card>
           <Card x-chunk="dashboard-01-chunk-2">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Received Amount</CardTitle>
+              <CardTitle className="text-sm font-medium">Locked</CardTitle>
               <CreditCard className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">+12,234</div>
+              <div className="text-2xl font-bold">₹{balance.locked/100}</div>
               <p className="text-xs text-muted-foreground">
-                +19% from last month
+                amount processing
               </p>
             </CardContent>
           </Card>
@@ -78,11 +102,19 @@ export default async function() {
             <CardContent>
               <div className="text-2xl font-bold">₹{balance.amount/100}</div>
               <p className="text-xs text-muted-foreground">
-                +201 since last hour
+                total wallet amount
               </p>
             </CardContent>
+         
           </Card>
+        </div>
+        <div className="max-w-3xl lg:ml-32">
+        <Graph transactions={monthlyTxn}/>
         </div>
         </main>
     </div>
 }
+
+
+
+// the amount should be locked when it is processed by the bank , since i dont have bank server the locked is always 0

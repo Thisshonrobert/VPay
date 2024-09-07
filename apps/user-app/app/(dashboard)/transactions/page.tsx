@@ -1,6 +1,6 @@
 import { Badge, Container } from "@radix-ui/themes";
 import {  Card, CardContent, CardDescription, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui";
-import getAllOnRampTxn from "../../lib/action/getAllOnRampTxn";
+import getAllOnRampTxn from "app/lib/action/getAllOnRampTxn";
 
 export default async function() {
     const transactions = await getAllOnRampTxn();
