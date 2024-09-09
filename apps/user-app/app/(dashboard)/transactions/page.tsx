@@ -38,7 +38,7 @@ export default async function() {
                     <TableCell>
                       <div className="font-medium text-md">{t.name}</div>
                       <div className=" text-sm text-muted-foreground md:inline">
-                        {t.number} 
+                        {t.email} 
                       </div>
                     </TableCell>
                     <TableCell >

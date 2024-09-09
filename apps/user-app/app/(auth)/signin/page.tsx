@@ -20,7 +20,7 @@ const LoginPage = () => {
     const password = useRef("");
     const name =useRef("");
     const router = useRouter();
-    const [loading,setLoading] = useState(false) //todo:add skeleton while loading
+    const [loading,setLoading] = useState(false) //todo:add spinner while loading
     const {bark} = useMessage();
 
     const onSubmit = async()=>{
@@ -59,6 +59,10 @@ const LoginPage = () => {
           <div className="grid gap-2">
               <Label>Name</Label>
               <Input onChange={(e)=>name.current=e.target.value} id="name" type="text" placeholder="Robert" required />
+            </div>
+            <div className="grid gap-2">
+              <Label>email</Label>
+              <Input onChange={(e)=>name.current=e.target.value} id="email" type="email" placeholder="Robert@gmail.com" required />
             </div>
             <div className="grid gap-2">
               <Label>Number</Label>

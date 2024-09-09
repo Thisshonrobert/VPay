@@ -85,9 +85,9 @@ export const authOptions:NextAuthOptions = {
                   }
                 });
         
-            session.user.id = token.sub;
+            session.user.id = token.sub;//token.sub typically represents the user's ID in the JWT.
             session.user.number = user.number;
-            session.user.name = user.name; //token.sub typically represents the user's ID in the JWT.
+            session.user.name = user.name; 
             return session;
         }catch(err){
             console.error("Error in session callback:", err);

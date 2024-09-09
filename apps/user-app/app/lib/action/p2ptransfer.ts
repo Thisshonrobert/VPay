@@ -2,10 +2,12 @@
 import prisma from "@repo/db/client"; 
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
+import { useMessage } from "hooks/useMessage";
 
 export async function p2ptransfer(tonumber: string, amount: number) {
   const session = await getServerSession(authOptions);
   const fromUserId = session?.user.id;
+  const {bark} = useMessage();
 
   if (!fromUserId) {
     return { message: "Error while sending" };
@@ -57,6 +59,7 @@ export async function p2ptransfer(tonumber: string, amount: number) {
         }
       });
     });
+    bark({ message: "transfer Successfull", success: true });
   } catch (error) {
     
     console.error("P2P transfer failed:", error.message);
@@ -69,6 +72,7 @@ export async function p2ptransfer(tonumber: string, amount: number) {
         Status: "Failure" 
       }
     });
+    bark({ message: "P2P transfer failed", success: false });
 
     return { message: "P2P transfer failed" };
   }
