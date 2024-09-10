@@ -29,8 +29,7 @@ const getByMonth = async () => {
         timeStamp: 'asc',
       },
     });
-    console.log("Sent Transfers:", sentTransfers);
-    console.log("Received Transfers:", receivedTransfers);
+    
   
     // Initialize an array with 12 months (January to December) for the current year
     const months = Array.from({ length: 12 }, (_, i) => ({
@@ -44,13 +43,11 @@ const getByMonth = async () => {
       const month = txn.timeStamp.getMonth();
       months[month].sent += txn.amount/100;
     });
-    console.log("Months after sent aggregation:", months);
     // Aggregate received transactions by month
     receivedTransfers.forEach((txn) => {
       const month = txn.timeStamp.getMonth();
       months[month].received += txn.amount/100;
     });
-    console.log("Months after received aggregation:", months);
   
     return months; // Return aggregated data for each month
   };

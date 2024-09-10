@@ -12,7 +12,6 @@ import {
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "ui"; // Adjust this based on your chart components
 
 export function Graph({ transactions }) {
-  console.log("Transactions data for graph:", transactions);
 
   const chartConfig = {
     sent: {

@@ -10,6 +10,7 @@ const config: Config = {
     './src/**/*.{ts,tsx}',
     './packages/ui/**/*.{js,ts,jsx,tsx}',
     "../../packages/**/*.{js,ts,jsx,tsx}",
+    '!../../packages/**/node_modules/**',  // Exclude node_modules
     './ui/**/*.{ts,tsx}'
   ],
   prefix: '',

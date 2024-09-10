@@ -31,8 +31,8 @@ const P2pTransactions = ({
         <Heading size='2' as="h6">Username</Heading>
         <Heading size='2' as="h6">Amount</Heading>
         </div>
-        {transactions.map((t) => (
-          <div className="flex justify-between py-2 space-y-2" key={t.time.toLocaleDateString()}>
+        {transactions.map((t,index) => (
+          <div className="flex justify-between py-2 space-y-2" key={index}>
             <div className="flex flex-col">
               <Text className="text-md">{t.direction} INR</Text>
               <Text className="text-slate-600 text-md">

@@ -32,8 +32,8 @@ export default async function() {
                     <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
-                {transactions.map((t)=>(
-                <TableBody key={t.time.toLocaleDateString()}>
+                {transactions.map((t,index)=>(
+                <TableBody key={index}>
                   <TableRow>
                     <TableCell>
                       <div className="font-medium text-md">{t.name}</div>

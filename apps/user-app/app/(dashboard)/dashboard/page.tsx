@@ -114,7 +114,7 @@ export default async function() {
         </main>
     </div>
 }
-
+// export const dynamic = "force-dynamic";
 
 
 // the amount should be locked when it is processed by the bank , since i dont have bank server the locked is always 0
