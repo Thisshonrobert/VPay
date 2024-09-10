@@ -21,7 +21,13 @@ export async function p2ptransfer(tonumber: string, amount: number) {
     where: { number: tonumber }
   });
 
-  if (!toUser) {
+  if(toUser.id == Number(fromUserId)){
+    return {
+      message:"You can't send money to your own account",
+      status:"error"
+    }
+  }
+  if (!toUser ) {
     return { message: "User not found",
           status:"error"};
     

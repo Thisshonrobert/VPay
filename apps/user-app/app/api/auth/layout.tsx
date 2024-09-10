@@ -6,8 +6,7 @@ export default function Layout({
 }): JSX.Element {
   return (
     <div  >
-     {children} 
-            
+     {children}        
     </div>
    
   );

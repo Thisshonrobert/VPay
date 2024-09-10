@@ -12,13 +12,14 @@ export async function CreateOnRampTxn(provider: string, amount: number) {
   const token = (Math.random()*1000).toString(); // this should come from a banking api
   const userId = session!.user.id;
  
-  // const ip = headers().get("x-forwarded-for") ?? "unknown";
-  // const isRateLimited= rateLimitter(ip);
-  // if (isRateLimited) {
-  //   return {
-  //     message:"too many request , try after 10 mins"
-  //   }
-  // }
+  const ip = headers().get("x-forwarded-for") ?? "unknown";
+  const isRateLimited= rateLimitter(ip);
+  if (isRateLimited) {
+    return {
+      message:"too many request , try after 10 mins",
+      status:"error"
+    }
+  }
 
   if (!userId) {
     return {

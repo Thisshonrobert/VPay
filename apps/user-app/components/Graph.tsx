@@ -11,7 +11,16 @@ import {
 } from "ui"; // Adjust this import if your card components differ
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "ui"; // Adjust this based on your chart components
 
-export function Graph({ transactions }) {
+type Transaction = {
+  month: string;
+  sent: number;
+  received: number;
+};
+
+type GraphProps = {
+  transactions: Transaction[];
+};
+export function Graph({ transactions }:GraphProps) {
 
   const chartConfig = {
     sent: {

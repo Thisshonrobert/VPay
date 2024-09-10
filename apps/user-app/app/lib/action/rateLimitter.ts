@@ -3,8 +3,8 @@ const idToRequestCount = new Map<string, number>();
 
 const rateLimit = {
     windowStart: Date.now(),
-    windowSize: 60 * 60 * 1000, //10mins
-    maxReqCount:4
+    windowSize: 10 * 60 * 1000, //10mins
+    maxReqCount:5
 }
 
 export const rateLimitter = (ip:string):boolean=>{

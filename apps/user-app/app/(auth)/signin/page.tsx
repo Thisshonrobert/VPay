@@ -20,17 +20,19 @@ const LoginPage = () => {
     const password = useRef("");
     const name =useRef("");
     const router = useRouter();
+    const email = useRef("");
     const [loading,setLoading] = useState(false) //todo:add spinner while loading
     const {bark} = useMessage();
 
     const onSubmit = async()=>{
       setLoading(true);
         const response = await signIn("credentials",{
-            phone:phone.current,
-            password:password.current,
-            name:name.current,
-            redirect:false,
-            callbackUrl:"/dashboard"
+          name:name.current, 
+          email:email.current, 
+          phone:phone.current,
+          password:password.current,
+          redirect:false,
+          callbackUrl:"/dashboard"
         })
         if (response?.ok) {
           router.push("/dashboard");
@@ -62,7 +64,7 @@ const LoginPage = () => {
             </div>
             <div className="grid gap-2">
               <Label>email</Label>
-              <Input onChange={(e)=>name.current=e.target.value} id="email" type="email" placeholder="Robert@gmail.com" required />
+              <Input onChange={(e)=>email.current=e.target.value} id="email" type="email" placeholder="Robert@gmail.com" required />
             </div>
             <div className="grid gap-2">
               <Label>Number</Label>

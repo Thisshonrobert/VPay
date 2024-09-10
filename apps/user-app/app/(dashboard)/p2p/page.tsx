@@ -10,7 +10,7 @@ const page = async () => {
     <div className="w-full flex flex-row justify-center gap-10">
 
       <SendCard />
-      <div className="w-1/3 mt-36">
+      <div className="w-1/3 mt-[10%]">
 
         <P2pTransactions transactions={transactions} />
 
