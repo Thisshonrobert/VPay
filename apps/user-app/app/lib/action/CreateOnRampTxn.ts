@@ -37,6 +37,14 @@ export async function CreateOnRampTxn(provider: string, amount: number) {
         token,
       },
     });
+    await prisma.balance.updateMany({
+      where:{
+        userId:Number(userId)
+      },
+      data:{
+        locked:amount
+      }
+    })
 
     return {
       message: "Onramp Created",

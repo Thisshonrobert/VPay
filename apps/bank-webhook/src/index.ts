@@ -33,7 +33,7 @@ app.post("/hdfcWebhook", async (req, res) => {
     }
 
     try {
-        await db.$transaction([
+        const result = await db.$transaction([
             db.balance.updateMany({
                 where: {
                     userId: Number(paymentInformation.userId)
@@ -42,6 +42,9 @@ app.post("/hdfcWebhook", async (req, res) => {
                     amount: {
                         // You can also get this from your DB
                         increment: Number(paymentInformation.amount)
+                    },
+                    locked:{
+                        decrement:Number(paymentInformation.amount)
                     }
                 }
             }),
@@ -54,6 +57,7 @@ app.post("/hdfcWebhook", async (req, res) => {
                 }
             })
         ]);
+        console.log(result); 
 
         res.json({
             message: "Captured"
