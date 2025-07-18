@@ -4,3 +4,64 @@ todo:
     openapi
     ratelimiting:login,payment actions
     recoil
+
+    VPay – Architecture & Flow
+Overview
+VPay is a monorepo wallet application built with a modern stack (Next.js, Express, Prisma, PostgreSQL, Tailwind, and a custom UI library). It supports user authentication, wallet balance management, on-ramp (add money), P2P transfers, and transaction history, with a modular architecture for scalability.
+
+High-Level Architecture
+Monorepo: Managed by Turborepo, with apps (user-app, bank-webhook) and packages (db, ui, store, etc.).
+Database: PostgreSQL, managed via Prisma ORM (db).
+Backend:
+user-app: Next.js app for user dashboard, authentication, and wallet features.
+bank-webhook: Express server to handle bank callbacks for on-ramp transactions.
+UI: Custom component library (ui) using Tailwind CSS and Radix UI.
+State Management: Recoil (planned), React context/hooks.
+API: Next.js API routes for user actions, with rate limiting and authentication.
+Main Features & Flow
+1. User Authentication
+Uses NextAuth for session management.
+Users log in with a phone number and password.
+2. Dashboard
+Shows user greeting, balance (unlocked, locked, total), and transaction summaries.
+Graphical view of monthly transactions.
+3. Add Money (On-Ramp)
+User selects a bank and amount.
+Creates an on-ramp transaction (status: Processing).
+Redirects to bank site; after payment, the bank calls the /hdfcWebhook endpoint (bank-webhook app).
+On webhook, the backend updates the user's balance and transaction status to Success.
+4. P2P Transfer
+User enters recipient's number and amount.
+Backend validates recipient, checks balance, and performs atomic transfer (debit sender, credit receiver, create transfer record).
+Rate limiting is enforced per IP.
+Transaction status is updated (Success/Failure).
+5. Transaction History
+On-Ramp Transactions: Shows recent add-money events with status and provider.
+P2P Transactions: Shows last 5 sent/received transfers, with direction, amount, and counterparties.
+All Transactions: Tabular view of all user transactions.
+6. Bank Webhook
+Receives POST requests from banks after payment.
+Validates payload, updates user balance and transaction status.
+Codebase Structure
+user-app: Next.js frontend (dashboard, auth, API routes).
+bank-webhook: Express server for bank callbacks.
+db: Prisma schema, client, and seed scripts.
+ui: Shared UI components (Card, Button, Chart, etc.).
+store: State management utilities.
+docker: Dockerfiles for deployment.
+Data Models (Prisma)
+User: id, name, number, password, balances, on-ramp transactions, p2p transfers.
+Balance: userId, amount, locked.
+OnRampTransaction: userId, amount, status, provider, token.
+p2pTransfer: fromUserId, toUserId, amount, status, timestamp.
+Flow Diagram
+User logs in → Dashboard loads (balance, transactions).
+Add Money → Initiate on-ramp → Redirect to bank → Bank webhook → Balance updated.
+P2P Transfer → Enter recipient/amount → Backend validates & processes → Balances updated for both users.
+Transactions → User views all transaction history.
+Tech Stack
+Frontend: Next.js, React, Tailwind CSS, Radix UI, custom UI library.
+Backend: Next.js API routes, Express (webhook), Prisma, PostgreSQL.
+Auth: NextAuth.js.
+State: React hooks, Recoil (planned).
+Dev Tools: Turborepo, ESLint, Prettier, Docker.
