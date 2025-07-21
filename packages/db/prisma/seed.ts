@@ -9,6 +9,7 @@ async function main() {
     create: {
       number: '1111111111',
       password: await bcrypt.hash('alice', 10),
+      email: 'alice@gmail.com',
       name: 'alice',
       Balance: {
         create: {
@@ -33,6 +34,7 @@ async function main() {
     create: {
       number: '2222222222',
       password: await bcrypt.hash('bob', 10),
+       email: 'bob@gmail.com',
       name: 'bob',
       Balance: {
         create: {

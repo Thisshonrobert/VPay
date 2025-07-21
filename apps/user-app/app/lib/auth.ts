@@ -21,6 +21,7 @@ export const authOptions:NextAuthOptions = {
           credentials: {
             name:{type:"text",required:true},
             phone: { label: "Phone number", type: "text", placeholder: "1231231231", required: true },
+            email:{label:"email" ,type: "email", placeholder: "Robert@gmail.com" ,required: true},
             password: { label: "Password", type: "password", required: true },
           },
         
@@ -88,6 +89,7 @@ export const authOptions:NextAuthOptions = {
             session.user.id = token.sub;//token.sub typically represents the user's ID in the JWT.
             session.user.number = user.number;
             session.user.name = user.name; 
+            session.user.email = user.email; // Assuming email is also stored in the user object
             return session;
         }catch(err){
             console.error("Error in session callback:", err);
@@ -96,5 +98,21 @@ export const authOptions:NextAuthOptions = {
     }
 }
 }
+/*
+  Safe internal redirect
+ts
+Copy
+Edit
+url = "http://localhost:3000/dashboard"
+baseUrl = "http://localhost:3000"
+✅ Since url.startsWith(baseUrl) → the user gets redirected to /dashboard.
+
+Example 2: External redirect (unsafe)
+ts
+Copy
+Edit
+url = "http://hacker-site.com/phish"
+baseUrl = "http://localhost:3000"
+*/
 
   

@@ -25,6 +25,10 @@ export default async function() {
     const balance = await getBalance();
     const transactions = await getAllOnRampTxn();
     const monthlyTxn = await getByMonth();
+     if(!session)
+        {
+         redirect('/signin')
+        } 
     let sentAmt = 0,receivedAmt=0;
     for(let i=0;i<transactions.length;i++){
       const t = transactions[i]
@@ -44,10 +48,7 @@ export default async function() {
 //   .reduce((total, t) => total + t.amount, 0);
 
 
-    if(!session)
-        {
-         redirect('/signin')
-        } 
+    
      
     return <div className="w-screen">
         <div className="text-3xl text-[#6a51a6] pt-4 mb-4 font-bold">

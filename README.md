@@ -30,6 +30,7 @@ User selects a bank and amount.
 Creates an on-ramp transaction (status: Processing).
 Redirects to bank site; after payment, the bank calls the /hdfcWebhook endpoint (bank-webhook app).
 On webhook, the backend updates the user's balance and transaction status to Success.
+![postman webhook call](image.png)
 4. P2P Transfer
 User enters recipient's number and amount.
 Backend validates recipient, checks balance, and performs atomic transfer (debit sender, credit receiver, create transfer record).

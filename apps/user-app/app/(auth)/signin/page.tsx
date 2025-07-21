@@ -44,7 +44,7 @@ const LoginPage = () => {
             message: "Unable to login. Please enter valid credentials",
             success: false,
           });
-    
+          console.error("Login failed:", response?.error);
           setLoading(false);
         }
     }
