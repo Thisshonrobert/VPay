@@ -11,7 +11,8 @@ app.use(express.json())
 const paymentSchema = z.object({
     token: z.string(),
     user_identifier: z.string(),
-    amount: z.string()
+    amount: z.string(),
+    PaymentResponse:z.enum(["Success", "Failure"])
 });
 
 app.post("/hdfcWebhook", async (req, res) => {
@@ -27,20 +28,51 @@ app.post("/hdfcWebhook", async (req, res) => {
             errors: validation.error.errors
         });
     }
-
+enum PaymentResponse {
+        Success = "Success",
+        failure = "Failure"
+    }
     // Use validated data
     const paymentInformation: {
         token: string;
         userId: string;
         amount: string;
+        PaymentResponse: PaymentResponse;
     } = {
         token: validation.data.token,
         userId: validation.data.user_identifier,
-        amount: validation.data.amount
+        amount: validation.data.amount,
+        PaymentResponse: validation.data.PaymentResponse === "Success" ? PaymentResponse.Success : PaymentResponse.failure
     };
 
     try {
-        
+        if(paymentInformation.PaymentResponse !== PaymentResponse.Success) {
+            await db.$transaction([
+                db.balance.updateMany({
+                    where: {
+                        userId: Number(paymentInformation.userId)
+                    },
+                    data: {
+                        locked: {
+                            decrement: Number(paymentInformation.amount)
+                        }
+                    }
+                }),
+                db.onRampTransaction.updateMany({
+                    where: {
+                        token: paymentInformation.token
+                    },
+                    data: {
+                        status: "Failure",
+                    }
+                })
+            ]);
+            return res.status(411).json({
+                message: "Error while processing webhook: No records updated"
+            });
+        }
+    
+        else{
          const [balanceUpdate, transactionUpdate] =  await db.$transaction([
             db.balance.updateMany({
                 where: {
@@ -65,40 +97,12 @@ app.post("/hdfcWebhook", async (req, res) => {
             })
         ]);
          console.log(balanceUpdate, transactionUpdate);
-//  const updatedBalances = balanceUpdate?.count ?? balanceUpdate;
-//     const updatedTransactions = transactionUpdate?.count ?? transactionUpdate;
-    
-//         // result[0] = balance update count, result[1] = transaction update count
-//         if ((updatedBalances === 0 || updatedTransactions === 0)) {
-//             // If no records updated, treat as failure
-//             await db.$transaction([
-//                 db.balance.updateMany({
-//                     where: {
-//                         userId: Number(paymentInformation.userId)
-//                     },
-//                     data: {
-//                         locked: {
-//                             decrement: Number(paymentInformation.amount)
-//                         }
-//                     }
-//                 }),
-//                 db.onRampTransaction.updateMany({
-//                     where: {
-//                         token: paymentInformation.token
-//                     },
-//                     data: {
-//                         status: "Failure",
-//                     }
-//                 })
-//             ]);
-//             return res.status(411).json({
-//                 message: "Error while processing webhook: No records updated"
-//             });
-//         }
+
 
         res.json({
             message: "Captured"
         });
+    }
     } catch(e) {
         console.error(e);
         // On failure, update transaction status to 'Failed' and remove locked amount

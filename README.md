@@ -2,8 +2,7 @@ todo:
     landing Page
     websockets
     openapi
-    ratelimiting:login,payment actions
-    recoil
+  
 
     VPay – Architecture & Flow
 Overview
@@ -30,6 +29,13 @@ User selects a bank and amount.
 Creates an on-ramp transaction (status: Processing).
 Redirects to bank site; after payment, the bank calls the /hdfcWebhook endpoint (bank-webhook app).
 On webhook, the backend updates the user's balance and transaction status to Success.
+sample Postman Post Req:
+{
+  "token": "232.23011382469227",
+  "user_identifier": "2",
+  "amount": "10000",
+  "PaymentResponse":"Success"
+}
 ![postman webhook call](image.png)
 4. P2P Transfer
 User enters recipient's number and amount.
