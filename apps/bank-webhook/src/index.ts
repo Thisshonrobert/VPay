@@ -2,11 +2,13 @@ import express from "express";
 import db from "@repo/db/client";
 import { z } from "zod";
 
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../dist/swagger.json';
 const app = express();
 
 app.use(express.json())
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 const paymentSchema = z.object({
     token: z.string(),
@@ -14,6 +16,35 @@ const paymentSchema = z.object({
     amount: z.string(),
     PaymentResponse:z.enum(["Success", "Failure"])
 });
+/**
+ * @swagger
+ * /hdfcWebhook:
+ *   post:
+ *     summary: HDFC webhook for payment response
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               token:
+ *                 type: string
+ *               user_identifier:
+ *                 type: string
+ *               amount:
+ *                 type: string
+ *               PaymentResponse:
+ *                 type: string
+ *                 enum: [Success, Failure]
+ *     responses:
+ *       200:
+ *         description: Payment recorded
+ *       400:
+ *         description: Bad Request
+ *       411:
+ *         description: Length Required
+ */
 
 app.post("/hdfcWebhook", async (req, res) => {
     
@@ -136,5 +167,7 @@ enum PaymentResponse {
     }
 
 })
-console.log("server is running")
-app.listen(3003);
+app.listen(3003, () => {
+  console.log("Server running at http://localhost:3003");
+  console.log("Docs available at http://localhost:3003/api-docs");
+});
