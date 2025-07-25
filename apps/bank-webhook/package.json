@@ -5,7 +5,7 @@
   "main": "index.js",
 
   "scripts": {
-  "build": "tsc && npm run swagger:build",
+  "build": "npm run swagger:build && tsc",
   "start": "node dist/index.js",
   "dev": "npx ts-node ./src/index.ts",
   "swagger:build": "node scripts/generate-swagger.js"

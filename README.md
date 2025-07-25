@@ -28,15 +28,7 @@ Graphical view of monthly transactions.
 User selects a bank and amount.
 Creates an on-ramp transaction (status: Processing).
 Redirects to bank site; after payment, the bank calls the /hdfcWebhook endpoint (bank-webhook app).
-On webhook, the backend updates the user's balance and transaction status to Success.
-sample Postman Post Req:
-{
-  "token": "232.23011382469227",
-  "user_identifier": "2",
-  "amount": "10000",
-  "PaymentResponse":"Success"
-}
-![postman webhook call](image.png)
+
 4. P2P Transfer
 User enters recipient's number and amount.
 Backend validates recipient, checks balance, and performs atomic transfer (debit sender, credit receiver, create transfer record).
@@ -48,6 +40,15 @@ P2P Transactions: Shows last 5 sent/received transfers, with direction, amount, 
 All Transactions: Tabular view of all user transactions.
 6. Bank Webhook
 Receives POST requests from banks after payment.
+On webhook, the backend updates the user's balance and transaction status to Success.
+sample Postman Post Req:
+{
+  "token": "232.23011382469227",
+  "user_identifier": "2",
+  "amount": "10000",
+  "PaymentResponse":"Success"
+}
+![postman webhook call](image.png)
 Validates payload, updates user balance and transaction status.
 Codebase Structure
 user-app: Next.js frontend (dashboard, auth, API routes).
@@ -72,3 +73,53 @@ Backend: Next.js API routes, Express (webhook), Prisma, PostgreSQL.
 Auth: NextAuth.js.
 State: React hooks, Recoil (planned).
 Dev Tools: Turborepo, ESLint, Prettier, Docker.
+
+
+AWS SETUP
+
+Can Run entire Turborepo in ec2 for simplification, but here dockerizing separately and adding workflows for learing.
+ec2-t3micro
+security group: open ssh,http,https ports
+
+connect using keypair: chmod 400 Vpay-keypair.pem
+                       cp Vpay-keypair.pem ~/.ssh/
+                       ssh -i ~/.ssh/Vpay-keypair.pem ubuntu@"public-ip-address"
+                       
+ngnix:
+server {
+        server_name Vpay.starzc.com;
+
+        location / {
+            proxy_pass http://localhost:3005;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+
+
+        }
+
+
+}
+
+server {
+        server_name Vpaybankwebhook.starzc.com;
+
+        location / {
+            proxy_pass http://localhost:3003;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+
+
+        }
+
+    
+
+}
+sudo nginx -t
+sudo nginx -s reload 
+Install certbot for https :https://certbot.eff.org/instructions?ws=nginx&os=snap

@@ -52,7 +52,7 @@ jobs:
             sudo docker pull thisshon/v-pay:latest
             sudo docker stop user-app || true
             sudo docker rm user-app || true
-            sudo docker run -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e NEXTAUTH_URL=http://vpay.uk.to -d --name user-app -p 3005:3000 --restart unless-stopped thisshon/v-pay:latest
+            sudo docker run -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e NEXTAUTH_URL=https://vpay.starzc.com -d --name user-app -p 3005:3000 --restart unless-stopped thisshon/v-pay:latest
 
       # Deploy bank-webhook to EC2
       - name: Deploy to EC2 (bank-webhook)
@@ -65,4 +65,4 @@ jobs:
             sudo docker pull thisshon/bank-webhook:latest
             sudo docker stop bank-webhook || true
             sudo docker rm bank-webhook || true
-            sudo docker run -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e NEXTAUTH_URL=http://bank.vpay.uk.to  -d --name bank-webhook -p 3003:3003 --restart unless-stopped thisshon/bank-webhook:latest
+            sudo docker run -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e NEXTAUTH_URL=https://vpaybankwebhook.starzc.com  -d --name bank-webhook -p 3003:3003 --restart unless-stopped thisshon/bank-webhook:latest
