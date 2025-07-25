@@ -3,10 +3,12 @@ import db from "@repo/db/client";
 import { z } from "zod";
 
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from '../dist/swagger.json';
+// import swaggerDocument from '../dist/swagger.json';
 const app = express();
 
 app.use(express.json())
+
+const swaggerDocument = require('../dist/swagger.json');
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
