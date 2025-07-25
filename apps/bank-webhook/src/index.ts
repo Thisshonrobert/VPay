@@ -7,10 +7,13 @@ import swaggerUi from 'swagger-ui-express';
 const app = express();
 
 app.use(express.json())
-
-const swaggerDocument = require('../dist/swagger.json');
-
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+let swaggerDocument: any;
+try {
+  swaggerDocument = require('../dist/swagger.json');
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+} catch (err) {
+  console.warn("⚠️ Swagger file not found. Skipping /api-docs route.",err);
+}
 
 const paymentSchema = z.object({
     token: z.string(),
@@ -63,7 +66,7 @@ app.post("/hdfcWebhook", async (req, res) => {
     }
 enum PaymentResponse {
         Success = "Success",
-        failure = "Failure"
+        Failure = "Failure"
     }
     // Use validated data
     const paymentInformation: {
@@ -75,7 +78,7 @@ enum PaymentResponse {
         token: validation.data.token,
         userId: validation.data.user_identifier,
         amount: validation.data.amount,
-        PaymentResponse: validation.data.PaymentResponse === "Success" ? PaymentResponse.Success : PaymentResponse.failure
+        PaymentResponse: validation.data.PaymentResponse === "Success" ? PaymentResponse.Success : PaymentResponse.Failure
     };
 
     try {

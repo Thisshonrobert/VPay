@@ -13,7 +13,8 @@ const swaggerOptions = {
   },
   apis: [path.join(__dirname, "../src/index.ts")], // Adjust if your file is elsewhere
 };
-
+const outputDir = path.join(__dirname, "../dist");
+fs.mkdirSync(outputDir, { recursive: true });
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 fs.writeFileSync(path.join(__dirname, "../dist/swagger.json"), JSON.stringify(swaggerSpec, null, 2));
 console.log("Swagger JSON generated at dist/swagger.json");
