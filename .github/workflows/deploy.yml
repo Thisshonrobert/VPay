@@ -6,43 +6,41 @@ on:
       - master
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check Out Repo
+      - name: 🛎️ Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Log in to Docker Hub
+      - name: 🔐 Log in to Docker Hub
         uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build and Push Docker image for user-app
-      - name: Build and Push user-app Docker image
+      - name: 📦 Build & Push Docker Image (user-app)
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./docker/Dockerfile.userApp
           push: true
-          tags: thisshon/v-pay:latest  # Replace with your Docker Hub username and repository
+          tags: thisshon/v-pay:latest
 
-      # Build and Push Docker image for bank-webhook
-      - name: Build and Push bank-webhook Docker image
+      - name: 📦 Build & Push Docker Image (bank-webhook)
         uses: docker/build-push-action@v2
         with:
           context: .
           file: ./docker/Dockerfile.bankwebhook
           push: true
-          tags: thisshon/bank-webhook:latest  # Replace with your Docker Hub username and repository
+          tags: thisshon/bank-webhook:latest
 
-      - name: Verify Pushed Images
+      - name: ✅ Verify Docker Images Pushed
         run: |
-          docker pull thisshon/v-pay:latest  # Verify user-app image
-          docker pull thisshon/bank-webhook:latest  # Verify bank-webhook image
+          docker pull thisshon/v-pay:latest
+          docker pull thisshon/bank-webhook:latest
 
-      # Deploy user-app to EC2
-      - name: Deploy to EC2 (user-app)
+      - name: 🚀 Deploy user-app to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -52,10 +50,16 @@ jobs:
             sudo docker pull thisshon/v-pay:latest
             sudo docker stop user-app || true
             sudo docker rm user-app || true
-            sudo docker run -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e NEXTAUTH_URL=https://vpay.starzc.com -d --name user-app -p 3005:3000 --restart unless-stopped thisshon/v-pay:latest
+            sudo docker run \
+              -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+              -e NEXTAUTH_URL="https://vpay.starzc.com" \
+              -d \
+              --name user-app \
+              -p 3005:3000 \
+              --restart unless-stopped \
+              thisshon/v-pay:latest
 
-      # Deploy bank-webhook to EC2
-      - name: Deploy to EC2 (bank-webhook)
+      - name: 🚀 Deploy bank-webhook to EC2
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
@@ -65,4 +69,11 @@ jobs:
             sudo docker pull thisshon/bank-webhook:latest
             sudo docker stop bank-webhook || true
             sudo docker rm bank-webhook || true
-            sudo docker run -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e NEXTAUTH_URL=https://vpaybankwebhook.starzc.com  -d --name bank-webhook -p 3003:3003 --restart unless-stopped thisshon/bank-webhook:latest
+            sudo docker run \
+              -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+              -e NEXTAUTH_URL="https://vpaybankwebhook.starzc.com" \
+              -d \
+              --name bank-webhook \
+              -p 3003:3003 \
+              --restart unless-stopped \
+              thisshon/bank-webhook:latest
