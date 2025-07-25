@@ -104,7 +104,7 @@ server {
 }
 
 server {
-        server_name Vpaybankwebhook.starzc.com;
+        server_name vpaybankwebhook.starzc.com;
 
         location / {
             proxy_pass http://localhost:3003;
@@ -116,9 +116,6 @@ server {
 
 
         }
-
-    
-
 }
 sudo nginx -t
 sudo nginx -s reload 

@@ -17,4 +17,4 @@ RUN npm run swagger:build
 
 RUN npm run build --filter=apps/bank-webhook
 
-CMD ["npm", "run", "start-bankwebhook"]
+CMD ["npm", "run", "start"]
