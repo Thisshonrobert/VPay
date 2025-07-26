@@ -1,11 +1,15 @@
 {
-  // "extends": "@repo/typescript-config/base.json",
+   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "dist",
-    "module": "node16",
-    "target": "es2019",
-    "moduleResolution": "node16",
+    "module": "NodeNext",
+    "target": "ES2022",
+   
+    
     "esModuleInterop": true,
+    
+    "moduleResolution": "NodeNext",
+    
     "strict": true,
     "skipLibCheck": true,
     "rootDir": "src",

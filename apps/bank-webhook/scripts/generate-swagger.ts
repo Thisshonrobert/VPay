@@ -1,6 +1,6 @@
-const swaggerJSDoc = require('swagger-jsdoc');
-const fs = require('fs');
-const path = require('path');
+import swaggerJSDoc from 'swagger-jsdoc';
+import fs from 'fs';
+import path from 'path';
 
 const swaggerOptions = {
   definition: {
@@ -11,8 +11,9 @@ const swaggerOptions = {
       description: "API documentation for the bank webhook endpoint"
     }
   },
-  apis: [path.join(__dirname, "../src/index.ts")], // Adjust if your file is elsewhere
+  apis: [path.join(__dirname, "../src/index.ts")],
 };
+
 const outputDir = path.join(__dirname, "../dist");
 fs.mkdirSync(outputDir, { recursive: true });
 const swaggerSpec = swaggerJSDoc(swaggerOptions);

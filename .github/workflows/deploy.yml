@@ -76,4 +76,7 @@ jobs:
               --name bank-webhook \
               -p 3003:3003 \
               --restart unless-stopped \
+              --log-driver json-file \
+              --log-opt max-size=10m \
+              --log-opt max-file=5 \
               thisshon/bank-webhook:latest

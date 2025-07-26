@@ -1,19 +1,29 @@
 import express from "express";
-import db from "@repo/db/client";
+// import db from "@repo/db/client";
+import { prisma as db } from '@repo/db/client';
+
 import { z } from "zod";
 
 import swaggerUi from 'swagger-ui-express';
-// import swaggerDocument from '../dist/swagger.json';
+
 const app = express();
 
 app.use(express.json())
-let swaggerDocument: any;
-try {
-  swaggerDocument = require('../dist/swagger.json');
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-} catch (err) {
-  console.warn("⚠️ Swagger file not found. Skipping /api-docs route.",err);
+// let swaggerDocument: any;
+async function loadSwagger() {
+  try {
+    const fs = await import("fs/promises");
+    const path = await import("path");
+    const swaggerPath = path.join(__dirname, "../dist/swagger.json");
+    const data = await fs.readFile(swaggerPath, "utf-8");
+    const swaggerJSON = JSON.parse(data);
+    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJSON));
+  } catch (err) {
+    console.warn("⚠️ Swagger file not found. Skipping /api-docs route.", err);
+  }
 }
+
+loadSwagger();
 
 const paymentSchema = z.object({
     token: z.string(),

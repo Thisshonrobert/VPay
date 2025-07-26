@@ -120,3 +120,6 @@ server {
 sudo nginx -t
 sudo nginx -s reload 
 Install certbot for https :https://certbot.eff.org/instructions?ws=nginx&os=snap
+free up space:
+sudo docker images -a # List all images
+sudo docker rmi $(sudo docker images -a -q) # Remove all images (be careful, this can remove active ones if not used correctly, better to use prune)
