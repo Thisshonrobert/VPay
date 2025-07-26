@@ -13,6 +13,7 @@ RUN npm install
 RUN npm run db:generate
 # 🧪 STEP 1: Generate Swagger JSON before build
 WORKDIR /usr/src/apps/bank-webhook
+RUN npm install --save-dev ts-node
 RUN npm run swagger:build
 
 RUN npm run build --filter=apps/bank-webhook
