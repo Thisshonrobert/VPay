@@ -1,16 +1,24 @@
+// {
+//     "extends": "@repo/typescript-config/base.json",
+//   "compilerOptions": {
+//     "outDir": "dist",
+//     "module": "NodeNext",
+//     "target": "ES2022",
+//     "esModuleInterop": true,
+//     "moduleResolution": "NodeNext",
+//     "strict": true,
+//     "skipLibCheck": true,
+//     "rootDir": "src",
+//     "resolveJsonModule": true,
+//   },
+//   "include": ["src"],
+//   "exclude": ["node_modules"]
+// }
 {
-    "extends": "@repo/typescript-config/base.json",
+  "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "outDir": "dist",
-    "module": "NodeNext",
-    "target": "ES2022",
-    "esModuleInterop": true,
-    "moduleResolution": "NodeNext",
-    "strict": true,
-    "skipLibCheck": true,
-    "rootDir": "src",
-    "resolveJsonModule": true,
+    "outDir": "dist"
   },
   "include": ["src"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
