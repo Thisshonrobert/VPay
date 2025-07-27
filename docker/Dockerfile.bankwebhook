@@ -14,4 +14,4 @@ RUN npm run db:generate
 
 RUN npm run build --filter=apps/bank-webhook
 
-CMD ["npm","run","start-bank-webhook"]
+CMD ["npm","run","start","--workspace=apps/bank-webhook"]
