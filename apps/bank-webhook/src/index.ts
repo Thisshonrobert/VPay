@@ -1,10 +1,11 @@
 import express from "express";
- import db from "@repo/db/client";
-// import { prisma as db } from '@repo/db/client';
+ import {prisma as db} from "@repo/db/client";
+
 import swaggerJSDoc from "swagger-jsdoc";
 import { z } from "zod";
 import swaggerUi from 'swagger-ui-express';
 
+// const db = require("@repo/db/client")
 const app = express();
 
 app.use(express.json())
@@ -183,5 +184,6 @@ app.listen(3003, () => {
   console.log("Server running at http://localhost:3003");
   console.log("Docs available at http://localhost:3003/api-docs");
 });
+
 
 
