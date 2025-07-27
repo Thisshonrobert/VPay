@@ -1,5 +1,5 @@
 import express from "express";
- import {prisma as db} from "@repo/db/client";
+ import  db from "@repo/db/client";
 
 import swaggerJSDoc from "swagger-jsdoc";
 import { z } from "zod";
