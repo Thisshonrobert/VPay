@@ -19,12 +19,7 @@
   "compilerOptions": {
     "outDir": "dist"
   },
-  // "compilerOptions": {
-  //   "outDir": "dist",
-  //   "module": "NodeNext",
-  //   "moduleResolution": "NodeNext",
-  //   "target": "ES2022"
-  // },
+
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

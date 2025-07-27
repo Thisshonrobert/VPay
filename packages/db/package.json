@@ -9,8 +9,12 @@
         "prisma": "^5.19.1"
     },
     "exports": {
-        "./client": "./index.ts"
+        "./client": "./index.ts",
+        "./clientbuilt":"./dist/index.js"
     },
+    "scripts": {
+        "build": "tsc"
+      },
     "prisma": {
         "seed": "ts-node prisma/seed.ts"
     }
