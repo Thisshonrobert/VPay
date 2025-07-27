@@ -11,10 +11,6 @@ COPY packages ./packages/
 RUN npm install
 # Can you add a script to the global package.json that does this?
 RUN npm run db:generate
-# 🧪 STEP 1: Generate Swagger JSON before build
-WORKDIR /usr/src/apps/bank-webhook
-RUN npm install --save-dev ts-node typescript
-RUN npm run swagger:build
 
 RUN npm run build --filter=apps/bank-webhook
 

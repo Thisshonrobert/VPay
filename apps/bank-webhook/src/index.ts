@@ -1,30 +1,27 @@
 import express from "express";
-// import db from "@repo/db/client";
-import { prisma as db } from '@repo/db/client';
-
+ import db from "@repo/db/client";
+// import { prisma as db } from '@repo/db/client';
+import swaggerJSDoc from "swagger-jsdoc";
 import { z } from "zod";
-
 import swaggerUi from 'swagger-ui-express';
 
 const app = express();
 
 app.use(express.json())
-// let swaggerDocument: any;
-async function loadSwagger() {
-  try {
-    const fs = await import("fs/promises");
-    const path = await import("path");
-    const swaggerPath = path.join(__dirname, "../dist/swagger.json");
-    const data = await fs.readFile(swaggerPath, "utf-8");
-    const swaggerJSON = JSON.parse(data);
-    app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerJSON));
-  } catch (err) {
-    console.warn("⚠️ Swagger file not found. Skipping /api-docs route.", err);
-  }
-}
 
-loadSwagger();
+const swaggerSpec = swaggerJSDoc({
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "VPay Bank Webhook API",
+      version: "1.0.0",
+      description: "Swagger documentation for bank webhook",
+    },
+  },
+  apis: ["./src/index.ts"], // Or wherever you keep your routes/controllers
+});
 
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 const paymentSchema = z.object({
     token: z.string(),
     user_identifier: z.string(),
@@ -186,3 +183,5 @@ app.listen(3003, () => {
   console.log("Server running at http://localhost:3003");
   console.log("Docs available at http://localhost:3003/api-docs");
 });
+
+
