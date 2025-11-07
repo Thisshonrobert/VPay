@@ -16,7 +16,7 @@ const swaggerSpec = swaggerJSDoc({
     info: {
       title: "VPay Bank Webhook API",
       version: "1.0.0",
-      description: "Swagger documentation for bank webhook",
+      description: "Swagger documentation for bank webhook - Can hit /hdfcWebhook endpoint instead of actual bank for testing",
     },
   },
   apis: ["./src/index.ts"], // Or wherever you keep your routes/controllers
@@ -88,7 +88,7 @@ enum PaymentResponse {
         amount: validation.data.amount,
         PaymentResponse: validation.data.PaymentResponse === "Success" ? PaymentResponse.Success : PaymentResponse.Failure
     };
-
+   
     try {
         if(paymentInformation.PaymentResponse !== PaymentResponse.Success) {
             await db.$transaction([

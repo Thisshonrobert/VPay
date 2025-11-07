@@ -60,19 +60,19 @@ const LoginPage = () => {
           <CardContent className="grid gap-4">
           <div className="grid gap-2">
               <Label>Name</Label>
-              <Input onChange={(e)=>name.current=e.target.value} id="name" type="text" placeholder="Robert" required />
+              <Input onChange={(e)=>name.current=e.target.value} id="name" type="text" placeholder="alice" required />
             </div>
             <div className="grid gap-2">
               <Label>email</Label>
-              <Input onChange={(e)=>email.current=e.target.value} id="email" type="email" placeholder="Robert@gmail.com" required />
+              <Input onChange={(e)=>email.current=e.target.value} id="email" type="email" placeholder="alice@gmail.com" required />
             </div>
             <div className="grid gap-2">
               <Label>Number</Label>
-              <Input onChange={(e)=>phone.current=e.target.value} id="phone" type="text" placeholder="1234567890" required />
+              <Input onChange={(e)=>phone.current=e.target.value} id="phone" type="text" placeholder="1111111111" required />
             </div>
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
-              <Input onChange={(e)=>password.current=e.target.value} id="password" type="password" placeholder="abc@123" required />
+              <Input onChange={(e)=>password.current=e.target.value} id="password" type="password" placeholder="alice" required />
             </div>
           </CardContent>
           <CardFooter>

@@ -20,8 +20,8 @@ export const authOptions:NextAuthOptions = {
           name: 'Credentials',
           credentials: {
             name:{type:"text",required:true},
-            phone: { label: "Phone number", type: "text", placeholder: "1231231231", required: true },
-            email:{label:"email" ,type: "email", placeholder: "Robert@gmail.com" ,required: true},
+            phone: { label: "Phone number", type: "text", placeholder: "1111111111", required: true },
+            email:{label:"email" ,type: "email", placeholder: "alice@gmail.com" ,required: true},
             password: { label: "Password", type: "password", required: true },
           },
         

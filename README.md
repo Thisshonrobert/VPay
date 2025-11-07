@@ -1,7 +1,12 @@
 todo:
     landing Page
     websockets
-    openapi
+
+TEST Login
+name:alice
+number:1111111111      (1 *10)
+gmail:alice@gmail.com
+password:alice
   
 
     VPay – Architecture & Flow
@@ -45,12 +50,19 @@ sample Postman Post Req:
 {
   "token": "232.23011382469227",
   "user_identifier": "2",
-  "amount": "10000",
+  "amount": "10000", -->(RS.100)
   "PaymentResponse":"Success"
 }
 ![postman webhook call](image.png)
 Validates payload, updates user balance and transaction status.
 Codebase Structure
+
+ALTERNBATIVE APPROACH 
+![webhook by swagger](image-1.png)
+![webhook response](image-2.png)
+
+
+
 user-app: Next.js frontend (dashboard, auth, API routes).
 bank-webhook: Express server for bank callbacks.
 db: Prisma schema, client, and seed scripts.
@@ -123,3 +135,4 @@ Install certbot for https :https://certbot.eff.org/instructions?ws=nginx&os=snap
 free up space:
 sudo docker images -a # List all images
 sudo docker rmi $(sudo docker images -a -q) # Remove all images (be careful, this can remove active ones if not used correctly, better to use prune)
+
