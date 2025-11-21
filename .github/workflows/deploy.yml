@@ -73,6 +73,7 @@ jobs:
             sudo docker rm bank-webhook || true
             sudo docker run \
               -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+              -e ZAP_SECRET="${{ secrets.ZAP_SECRET }}" \
               -e NEXTAUTH_URL="https://vpaybankwebhook.starzc.com" \
               -d \
               --name bank-webhook \
