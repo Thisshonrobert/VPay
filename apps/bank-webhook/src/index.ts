@@ -146,12 +146,12 @@ app.post("/hdfcWebhook", async (req, res) => {
             try {
                 console.log("inside zap section")
                 await fetch(
-                    "https://e6dad8e90eeb.ngrok-free.app/hooks/catch/1/41ff9d05-7a20-41e3-9874-c0e6ecc6450b",
+                    "https://573aa6cfe4fd.ngrok-free.app/hooks/catch/1/41ff9d05-7a20-41e3-9874-c0e6ecc6450b",
                     {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
-                            "X-ZAP-SECRET": "my_super_secret_12345",  
+                            "X-ZAP-SECRET": process.env.ZAP_SECRET || ""  
                         },
                         body: JSON.stringify({
                             from: "thisshonrobert0205@gmail.com",
@@ -206,9 +206,9 @@ app.post("/hdfcWebhook", async (req, res) => {
     }
 
 })
-app.listen(3005, () => {
-    console.log("Server running at http://localhost:3005");
-    console.log("Docs available at http://localhost:3005/api-docs");
+app.listen(3003, () => {
+    console.log("Server running at http://localhost:3003");
+    console.log("Docs available at http://localhost:3003/api-docs");
 });
 
 
