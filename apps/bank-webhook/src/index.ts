@@ -144,6 +144,8 @@ app.post("/hdfcWebhook", async (req, res) => {
                 })
             ]);
             try {
+                const displayAmount = Number(paymentInformation.amount) / 100;
+
                 console.log("inside zap section")
                 await fetch(
                     "https://573aa6cfe4fd.ngrok-free.app/hooks/catch/1/41ff9d05-7a20-41e3-9874-c0e6ecc6450b",
@@ -157,7 +159,7 @@ app.post("/hdfcWebhook", async (req, res) => {
                             from: "thisshonrobert0205@gmail.com",
                             to: "thisshonrobert0205@gmail.com",
                             subject: "Vpay Wallet credited",
-                            body: `Vpay ₹${paymentInformation.amount} added to your wallet`
+                            body: `Vpay ₹${displayAmount} added to your wallet`
                         }),
                     }
                 );
