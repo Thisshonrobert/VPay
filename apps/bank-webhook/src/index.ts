@@ -1,16 +1,17 @@
 import express from "express";
 import db from "@repo/db/client";
+import cors from "cors";
 
 import swaggerJSDoc from "swagger-jsdoc";
 import { z } from "zod";
 import swaggerUi from 'swagger-ui-express';
-import axios from "axios";
 import dotenv from "dotenv";
 dotenv.config();
 
-// const db = require("@repo/db/client")
+
 const app = express();
 
+app.use(cors())
 app.use(express.json())
 
 const swaggerSpec = swaggerJSDoc({

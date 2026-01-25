@@ -9,7 +9,7 @@ import { rateLimitter } from "./rateLimitter";
 
 export async function CreateOnRampTxn(provider: string, amount: number) {
   const session = await getServerSession(authOptions);
-  const token = (Math.random()*1000).toString(); // this should come from a banking api
+  // const token = (Math.random()*1000).toString(); // this should come from a banking api
   const userId = session!.user.id;
  
   const ip = headers().get("x-forwarded-for") ?? "unknown";
@@ -27,16 +27,42 @@ export async function CreateOnRampTxn(provider: string, amount: number) {
     };
   }
   try {
-    await prisma.onRampTransaction.create({
-      data: {
-        userId:Number(userId),
-        status: "Processing",
-        provider,
-        amount,
-        startTime: new Date(),
-        token,
-      },
-    });
+    // await prisma.onRampTransaction.create({
+    //   data: {
+    //     userId:Number(userId),
+    //     status: "Processing",
+    //     provider,
+    //     amount,
+    //     startTime: new Date(),
+    //     token,
+    //   },
+    // });
+    const txn = await prisma.onRampTransaction.create({
+    data: {
+      userId: Number(userId),
+      provider,
+      amount,
+      status: "Initiated",
+      startTime: new Date()
+    }
+  });
+   const bankResponse = await fetch("http://localhost:3004/bank-server/api/create-payment", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      userId:Number(userId),
+      amount:String(amount),
+      referenceId: txn.id,
+    })
+  });
+   const { paymentToken, redirectUrl } = await bankResponse.json();
+    await prisma.onRampTransaction.update({
+    where: { id: txn.id },
+    data: {
+      token: paymentToken,
+      status: "Processing"
+    }
+  });
     await prisma.balance.updateMany({
       where: {
         userId: Number(userId)
@@ -50,7 +76,9 @@ export async function CreateOnRampTxn(provider: string, amount: number) {
 
     return {
       message: "Onramp Created",
-      token
+      paymentToken:paymentToken,
+      redirectUrl:redirectUrl
+
     };
   } catch (error) {
     return {

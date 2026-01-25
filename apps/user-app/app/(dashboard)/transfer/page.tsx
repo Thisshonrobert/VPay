@@ -1,13 +1,17 @@
+
 import { AddMoney } from "@components/AddMoneyCard";
 import { BalanceCard } from "@components/BalanceCard";
 import { OnRampTransactions } from "@components/OnRampTransactions";
 import getBalance from "../../lib/action/getBalance";
 import getRecentOnRampTransactions from "../../lib/action/getRecentOnRampTxn";
+import { useEffect } from "react";
 
 
 export default async function() {
     const balance = await getBalance();
     const transactions = await getRecentOnRampTransactions();
+
+   
 
     return <div className="w-screen">
         <div className="text-4xl text-[#6a51a6] pt-8 mb-8 font-bold">

@@ -34,5 +34,6 @@ export async function Calculatep2p() {
       senderName: t.fromUser.name, 
       recieverName: t.toUser.name,     
       direction: t.fromUserId === Number(session!.user.id) ? 'Sent' : 'Received',
+      status:t.Status
     }));
   }

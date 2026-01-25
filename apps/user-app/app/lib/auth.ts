@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import { DefaultSession, NextAuthOptions, Session } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import CredentialsProvider from "next-auth/providers/credentials";
+import Email from "next-auth/providers/email";
 
 declare module "next-auth" {
     interface Session {
@@ -10,6 +11,7 @@ declare module "next-auth" {
             id: string | undefined;
             number:String,
             name:String
+            email:String
         } & DefaultSession["user"];
     }
 }
@@ -41,7 +43,8 @@ export const authOptions:NextAuthOptions = {
                     return {
                         id: existingUser.id.toString(),
                         name: existingUser.name,
-                        number: existingUser.number
+                        number: existingUser.number,
+                        email:existingUser.email
                     }
                 }
                 return null;
@@ -53,9 +56,18 @@ export const authOptions:NextAuthOptions = {
                         name:credentials.name,
                         number: credentials.phone,
                         password: hashedPassword,
-                       
-                    }
+                        email:credentials.email
+                    },
+                    
                 });
+                 await db.balance.create({
+                    data:{
+                        amount:0,
+                        locked:0,
+                        userId:user.id
+                    }
+                })
+                
                
             
                 return {

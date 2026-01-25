@@ -7,11 +7,11 @@ export function AppbarClient() {
   const session = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  if(pathname === "/signin"){
+  if(pathname === "/signin" || pathname === '/' || pathname==='/bankfrontend' || pathname==='/success'){
     return <div></div>
   }
   return (
-   <div className="bg-pink-50">
+   <div className="bg-slate-50">
       <Appbar onLogoClick={()=>router.push("/dashboard")} onSignin={()=>router.push("/auth/signin")} onSignout={async () => {
         await signOut({redirect:false})
         router.push("/signin")

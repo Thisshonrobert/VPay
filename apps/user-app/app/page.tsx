@@ -16,7 +16,7 @@ export default function LandingPage() {
   const router = useRouter();
 
   return (
-    <main className={`min-h-screen bg-white ${poppins.className} selection:bg-[#00baf2]/20`}>
+    <main className={`h-screen bg-white ${poppins.className} selection:bg-[#00baf2]/20 overflow-hidden`}>
       {/* Navbar */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-20 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="flex items-center gap-2">
@@ -29,7 +29,7 @@ export default function LandingPage() {
           onClick={() => router.push("/signin")}
           className="px-8 py-2.5 text-sm font-semibold text-white transition-all bg-purple-800 rounded-full hover:bg-[#009ac8] hover:shadow-lg hover:shadow-[#00baf2]/20 active:scale-95"
         >
-          Login
+          Login/Signup
         </button>
       </nav>
 
@@ -44,7 +44,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center gap-2 mb-6">
-              <span className="font-bold text-purple-800 text-xl tracking-wide">VPay</span>
+             
 
             </div>
 

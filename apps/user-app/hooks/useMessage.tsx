@@ -8,7 +8,7 @@ export const useMessage=()=>{
     function error(msg:string){
         toast.error(msg, {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -21,7 +21,7 @@ export const useMessage=()=>{
     function success(msg:string){
         toast.success(msg, {
             position: "top-right",
-            autoClose: 5000,
+            autoClose: 1000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,

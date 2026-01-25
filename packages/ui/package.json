@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint . --max-warnings 0",
     "generate:component": "turbo gen react-component",
-    "ui:add": "npx shadcn-ui@latest add"
+    "ui:add": "npx shadcn@latest add"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
@@ -35,6 +35,7 @@
     "@tanstack/react-table": "^8.20.5",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cmdk": "^1.1.1",
     "framer-motion": "^11.3.31",
     "lucide-react": "^0.436.0",
     "recharts": "^2.12.7",

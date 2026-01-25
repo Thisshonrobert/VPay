@@ -9,29 +9,31 @@ const P2pTransactions = ({
     senderName: string;
     recieverName: string;
     direction: string;
+    status: 'Success' | 'Failure';
   }[];
 }) => {
   if (!transactions.length) {
     return (
       <Card
-        className="p-4 bg-white shadow-md rounded-lg w-full"
+        className="p-4 bg-white shadow-md rounded-lg w-full text-purple-900"
         title="Recent Transactions"
       >
         <div className="text-center pb-8 pt-8">No Recent transactions</div>
       </Card>
     );
   }
+  const PassedTransactions = transactions.filter(t => t.status === 'Success')
   return (
     
     <Card className="p-4 bg-white shadow-md rounded-lg w-full " title="Recent Transactions">
       <div >
-        <Heading as="h3">Recent Transactions</Heading>
+        <Heading as="h3" className="text-purple-900">Recent Transactions</Heading>
         <div className="flex justify-between mt-2">
         <Heading size='2' as="h6">Sent/Received</Heading>
         <Heading size='2' as="h6">Username</Heading>
         <Heading size='2' as="h6">Amount</Heading>
         </div>
-        {transactions.map((t,index) => (
+        {PassedTransactions.map((t,index) => (
           <div className="flex justify-between py-2 space-y-2" key={index}>
             <div className="flex flex-col">
               <Text className="text-md">{t.direction} INR</Text>
