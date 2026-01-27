@@ -4,10 +4,12 @@ import { BalanceCard } from "@components/BalanceCard";
 import { OnRampTransactions } from "@components/OnRampTransactions";
 import getBalance from "../../lib/action/getBalance";
 import getRecentOnRampTransactions from "../../lib/action/getRecentOnRampTxn";
-import { useEffect } from "react";
+import { Suspense } from "react";
+import TransferSkeleton from "@components/Skeletons/TransferSkeleton";
 
 
-export default async function() {
+
+ async function TransferPage() {
     const balance = await getBalance();
     const transactions = await getRecentOnRampTransactions();
 
@@ -30,3 +32,13 @@ export default async function() {
         </div>
     </div>
 }
+
+export default function page() {
+  return (
+    <Suspense fallback={<TransferSkeleton />}>
+      <TransferPage />
+    </Suspense>
+  )
+}
+
+export const dynamic = "force-dynamic";

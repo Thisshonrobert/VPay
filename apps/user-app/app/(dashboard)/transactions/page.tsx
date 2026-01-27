@@ -1,8 +1,10 @@
 import { Badge, Container } from "@radix-ui/themes";
 import {  Card, CardContent, CardDescription, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui";
 import getAllOnRampTxn from "app/lib/action/getAllOnRampTxn";
+import { Suspense } from "react";
+import TransactionSkeleton from "@components/Skeletons/TransactionSkeleton";
 
-export default async function() {
+  async function TransactionPage() {
     const transactions = await getAllOnRampTxn();
 
     return(
@@ -61,3 +63,12 @@ export default async function() {
     )
         
 }
+
+export default function page() {
+  return (
+    <Suspense fallback={<TransactionSkeleton />}>
+      <TransactionPage />
+    </Suspense>
+  )
+}
+

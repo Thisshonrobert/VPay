@@ -2,9 +2,10 @@
 
 import { Button, Card, Select, TextInput } from "ui/prebuilt/index";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CreateOnRampTxn } from "../app/lib/action/CreateOnRampTxn";
 import { useMessage } from "hooks/useMessage";
+import { useRouter } from "next/navigation";
 
 const SUPPORTED_BANKS = [{
     name: "HDFC Bank",
@@ -13,12 +14,24 @@ const SUPPORTED_BANKS = [{
 
 export const AddMoney = () => {
     
+    const router = useRouter();
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [amount, setAmount] = useState(0);
     const [latestToken, setLatestToken] = useState<string | null>(null);
     const [loading, setLoading] = useState(false)
     const { bark } = useMessage();
 
+    useEffect(() => {
+        const channel = new BroadcastChannel('payment_channel');
+        channel.onmessage = (event) => {
+            if (event.data === 'payment_success') {
+                router.refresh();
+            }
+        };
+        return () => {
+            channel.close();
+        };
+    }, [router]);
 
 
     return <div className="space-y-6">
@@ -48,10 +61,7 @@ export const AddMoney = () => {
                                 return
                             }
                             const response = await CreateOnRampTxn(provider, (amount * 100));
-                            console.log(response.message)
-                            console.log(response.paymentToken)
-                            console.log(response.redirectUrl)
-
+                            
                             if (response?.paymentToken) {
                                 setLatestToken(response.paymentToken);
                             }

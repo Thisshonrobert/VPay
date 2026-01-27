@@ -5,7 +5,8 @@ import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
 
 import { headers } from "next/headers";
-import { rateLimitter } from "./rateLimitter"; 
+import { rateLimitter } from "./rateLimitter";
+import { revalidatePath } from "next/cache"; 
 
 export async function CreateOnRampTxn(provider: string, amount: number) {
   const session = await getServerSession(authOptions);
@@ -74,6 +75,7 @@ export async function CreateOnRampTxn(provider: string, amount: number) {
       }
     })
 
+    revalidatePath('/dashboard/transfer');
     return {
       message: "Onramp Created",
       paymentToken:paymentToken,

@@ -39,11 +39,11 @@ app.post('/bank-server/api/create-payment',async(req:Request,res:Response)=>{
     
     res.json({
       paymentToken,
-      redirectUrl: `http://localhost:3001/bankfrontend?token=${paymentToken}`
+      redirectUrl: `http://localhost:3000/bankfrontend?token=${paymentToken}`
     });
 })
 
 
 app.listen(3004,()=>{
-    console.log('BANK SERVER RUNNING')
+    console.log('BANK SERVER RUNNING at 3004')
 })

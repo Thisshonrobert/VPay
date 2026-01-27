@@ -6,10 +6,11 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "db:generate": "cd packages/db && npx prisma generate && cd ../..", 
+    "db:generate": "cd packages/db && npx prisma generate && cd ../..",
     "start-user-app": "cd ./apps/user-app && npm run start",
     "start-bankwebhook": "cd ./apps/bank-webhook && npm run start",
-    "start": "concurrently \"npm run start-bankwebhook\" \"npm run start-user-app\""
+    "start-bankserver": "cd ./apps/bank-server && npm run start",
+    "start": "concurrently \"npm run start-bankwebhook\" \"npm run start-user-app\" \"npm run start-bankserver\""
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
@@ -25,5 +26,8 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "sharp": "^0.34.5"
+  }
 }

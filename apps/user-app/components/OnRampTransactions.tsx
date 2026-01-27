@@ -1,3 +1,4 @@
+import { Badge } from "ui"
 import { Card } from "ui/prebuilt/index"
 
 export enum OnRampStatus{
@@ -36,7 +37,7 @@ export const OnRampTransactions = ({
                     </div>
                     
                 </div>
-                <div>{t.status}</div>
+                  <Badge className={`text-xs rounded-full h-5 ${["Success", "Processing"].includes(t.status) ? "border-green-500 text-green-700 bg-green-50" : "border-red-500 text-red-700 bg-red-50"}`} variant="outline">{t.status}</Badge>
                 <div className="flex flex-col justify-center">
                    <div>+ Rs {t.amount / 100}</div> 
                      

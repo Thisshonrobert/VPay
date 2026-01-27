@@ -3,7 +3,8 @@ import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import { headers } from "next/headers";
-import { rateLimitter } from "./rateLimitter"; 
+import { rateLimitter } from "./rateLimitter";
+import { revalidatePath } from "next/cache"; 
 
 export async function p2ptransfer(tonumber: string, amount: number) {
   const session = await getServerSession(authOptions);
@@ -87,5 +88,6 @@ export async function p2ptransfer(tonumber: string, amount: number) {
     return { message: "P2P transfer failed",status:"success" };
   }
 
+  revalidatePath('/dashboard/p2p');
   return { message: "P2P transfer successful",status:"success" };
 }

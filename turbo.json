@@ -3,7 +3,7 @@
   "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
-      "env": ["JWT_SECRET", "DATABASE_URL"],
+      "env": ["JWT_SECRET", "DATABASE_URL","ZAP_SECRET","NEXTAUTH_URL"],
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },

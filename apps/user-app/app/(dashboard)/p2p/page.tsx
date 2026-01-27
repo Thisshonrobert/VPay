@@ -1,10 +1,10 @@
 import P2pTransactions from '@components/P2pTransactions'
 import { SendCard } from "@components/SendCard"
 import { Calculatep2p } from '../../lib/action/Calculatep2p'
+import { Suspense } from 'react';
+import P2PSkeleton from '@components/Skeletons/P2PSkeleton';
 
-
-
-const page = async () => {
+async function P2p(){
   const transactions = await Calculatep2p();
   return (
     <div className="w-full flex flex-row justify-center gap-10">
@@ -20,7 +20,17 @@ const page = async () => {
   )
 }
 
-export default page
+
+export default function page() {
+  return (
+    <Suspense fallback={<P2PSkeleton />}>
+      <P2p />
+    </Suspense>
+  )
+}
+
+
+
 
 
 

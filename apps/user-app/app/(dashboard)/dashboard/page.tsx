@@ -18,7 +18,7 @@ import getAllOnRampTxn from "app/lib/action/getAllOnRampTxn";
 import getByMonth from "app/lib/action/getByMonth";
 import { Graph } from "@components/Graph";
 import { Suspense } from "react";
-import { DashboardSkeleton } from "@components/DashboardSkeleton";
+import { DashboardSkeleton } from "@components/Skeletons/DashboardSkeleton";
 
 async function Dashboard() {
     const session = await getServerSession(authOptions);
