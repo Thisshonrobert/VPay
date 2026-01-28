@@ -42,7 +42,8 @@ jobs:
           file: ./docker/Dockerfile.userApp
           push: true
           tags: thisshon/v-pay:latest
-
+          build-args: |
+            NEXT_PUBLIC_WEBHOOK_URL=https://vpaybankwebhook.starzc.com
       
 
       - name: ✅ Verify Docker Images Pushed

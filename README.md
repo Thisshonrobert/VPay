@@ -129,6 +129,7 @@ server {
 
         }
 }
+sudo docker system prune -f
 sudo nginx -t
 sudo nginx -s reload 
 Install certbot for https :https://certbot.eff.org/instructions?ws=nginx&os=snap
