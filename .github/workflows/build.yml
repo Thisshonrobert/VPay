@@ -3,9 +3,9 @@
 name: Build Succeeds on PR
 
 on:
-  pull_request:
+  pull_request:            #This runs when someone wants to merge into master
    branches:
-      - master
+      - master           
 
 jobs:
   build:

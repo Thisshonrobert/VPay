@@ -13,6 +13,8 @@ interface PaymentData {
   refId: number;
 }
 
+const WEBHOOK_URL = process.env.NEXT_PUBLIC_WEBHOOK_URL!
+
 export function BankContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -46,7 +48,7 @@ export function BankContent() {
 
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:3003/hdfcWebhook', {
+      const response = await fetch(`${WEBHOOK_URL}/hdfcWebhook`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

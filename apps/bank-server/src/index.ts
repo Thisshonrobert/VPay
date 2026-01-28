@@ -1,9 +1,12 @@
 import express from "express";
 import { type Response, type Request } from "express";
 import { z } from "zod";
-import db from "@repo/db/client";
+import dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
+
+const REDIRECT_URL = process.env.REDIRECT_URL 
 
 app.use(express.json())
 
@@ -39,7 +42,7 @@ app.post('/bank-server/api/create-payment',async(req:Request,res:Response)=>{
     
     res.json({
       paymentToken,
-      redirectUrl: `http://localhost:3000/bankfrontend?token=${paymentToken}`
+      redirectUrl: `${REDIRECT_URL}/bankfrontend?token=${paymentToken}`
     });
 })
 

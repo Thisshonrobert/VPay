@@ -27,6 +27,14 @@ jobs:
           push: true
           tags: thisshon/bank-webhook:latest
 
+      - name: 📦 Build & Push Docker Image (bank-server)
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./docker/Dockerfile.bankserver
+          push: true
+          tags: thisshon/bank-server:latest
+
       - name: 📦 Build & Push Docker Image (user-app)
         uses: docker/build-push-action@v2
         with:
@@ -41,6 +49,7 @@ jobs:
         run: |
           docker pull thisshon/v-pay:latest
           docker pull thisshon/bank-webhook:latest
+          docker pull thisshon/bank-server:latest
 
       - name: 🚀 Deploy user-app to EC2
         uses: appleboy/ssh-action@master
@@ -55,6 +64,9 @@ jobs:
             sudo docker run \
               -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
               -e NEXTAUTH_URL="https://vpay.starzc.com" \
+              -e JWT_SECRET="${{ secrets.JWT_SECRET }}" \
+              -e NEXT_PUBLIC_WEBHOOK_URL="https://vpaybankwebhook.starzc.com" \
+              -e BANKSERVER_URL="https://vpaybankserver.starzc.com" \
               -d \
               --name user-app \
               -p 3005:3000 \
@@ -83,3 +95,27 @@ jobs:
               --log-opt max-size=10m \
               --log-opt max-file=5 \
               thisshon/bank-webhook:latest
+
+      - name: 🚀 Deploy bank-server to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          script: |
+            sudo docker pull thisshon/bank-server:latest
+            sudo docker stop bank-server || true
+            sudo docker rm bank-server || true
+            sudo docker run \
+              -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+              -e ZAP_SECRET="${{ secrets.ZAP_SECRET }}" \
+              -e NEXTAUTH_URL="https://vpaybankserver.starzc.com" \
+              -e REDIRECT_URL="https://vpay.starzc.com" \
+              -d \
+              --name bank-server \
+              -p 3004:3004 \
+              --restart unless-stopped \
+              --log-driver json-file \
+              --log-opt max-size=10m \
+              --log-opt max-file=5 \
+              thisshon/bank-server:latest

@@ -3,14 +3,16 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "@repo/db/client";
-
 import { headers } from "next/headers";
 import { rateLimitter } from "./rateLimitter";
 import { revalidatePath } from "next/cache"; 
 
+
+const BANKSERVER_URL = process.env.BANKSERVER_URL!
+
 export async function CreateOnRampTxn(provider: string, amount: number) {
   const session = await getServerSession(authOptions);
-  // const token = (Math.random()*1000).toString(); // this should come from a banking api
+  
   const userId = session!.user.id;
  
   const ip = headers().get("x-forwarded-for") ?? "unknown";
@@ -47,7 +49,7 @@ export async function CreateOnRampTxn(provider: string, amount: number) {
       startTime: new Date()
     }
   });
-   const bankResponse = await fetch("http://localhost:3004/bank-server/api/create-payment", {
+   const bankResponse = await fetch(`${BANKSERVER_URL}/bank-server/api/create-payment`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
