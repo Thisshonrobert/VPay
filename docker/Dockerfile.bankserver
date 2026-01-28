@@ -4,6 +4,8 @@ WORKDIR /usr/src
 
 COPY package.json package-lock.json turbo.json tsconfig.json ./
 
+COPY packages ./packages/
+
 COPY apps/bank-server ./apps/bank-server
 
 RUN npm install
