@@ -32,10 +32,10 @@ export function BankContent() {
     try {
       // Decode the token from base64
       const decoded = Buffer.from(token, 'base64').toString('utf-8');
-    
+
       const data = JSON.parse(decoded) as PaymentData;
-      
-      
+
+
       setPaymentData(data);
     } catch (err) {
       setError('Invalid payment token');
@@ -68,22 +68,26 @@ export function BankContent() {
       const result = await response.json();
       console.log('Payment result:', result);
 
-      // Redirect after successful processing
       if (success && result.message === 'Captured') {
-        // Redirect to success page with payment details
         const params = new URLSearchParams({
           amount: paymentData.amount,
           refId: paymentData.refId.toString(),
           userId: paymentData.userId.toString(),
         });
-       
         router.push(`/success?${params.toString()}`);
-      } 
+      } else if (!success) {
+        const channel = new BroadcastChannel('payment_channel');
+        channel.postMessage('payment_failure');
+        channel.close();
+      }
     } catch (err) {
       setError('Failed to process payment. Please try again.');
+      const channel = new BroadcastChannel('payment_channel');
+      channel.postMessage('payment_failure');
+      channel.close();
       console.error('Payment error:', err);
       setLoading(false);
-      
+
     }
   };
 
@@ -96,7 +100,7 @@ export function BankContent() {
           </CardHeader>
           <CardContent>
             <p className="text-red-600 mb-4">{error}</p>
-            
+
           </CardContent>
         </Card>
       </div>
@@ -132,10 +136,10 @@ export function BankContent() {
           <div className="flex justify-center gap-4 items-center">
             <span className="text-sm font-semibold text-gray-600">Secured by</span>
             <Image
-            src={hdfc}
-            alt='HDFC'
-            width={50}
-            height={50}
+              src={hdfc}
+              alt='HDFC'
+              width={50}
+              height={50}
             />
           </div>
         </div>
@@ -214,8 +218,8 @@ export function BankContent() {
               <CardContent className="pt-6">
                 <div className="text-center space-y-3">
                   <svg className="w-16 h-16 mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="48" fill="#00AA44" opacity="0.1" stroke="#00AA44" strokeWidth="2"/>
-                    <path d="M 35 50 L 45 60 L 65 40" stroke="#00AA44" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+                    <circle cx="50" cy="50" r="48" fill="#00AA44" opacity="0.1" stroke="#00AA44" strokeWidth="2" />
+                    <path d="M 35 50 L 45 60 L 65 40" stroke="#00AA44" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                   <div>
                     <p className="font-semibold text-gray-800">Norton Secured</p>

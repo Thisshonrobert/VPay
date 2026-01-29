@@ -5,6 +5,7 @@ import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "u
 import { getName } from "../app/lib/action/getName"
 import useDebounce from "hooks/useDebounce"
 import { Check } from "lucide-react"
+import { useSession } from "next-auth/react";  
 
 
 interface SearchProps {
@@ -23,10 +24,15 @@ export default function Search({ onSelect }: SearchProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [selectedNumber, setSelectedNumber] = useState<string | null>(null);
     const debouncedValue = useDebounce(searchValue, 500);
+    const { data } = useSession();
 
     useEffect(() => {
         const fetchResults = async () => {
             if (!debouncedValue || debouncedValue.trim() === "") {
+                setResults([]);
+                return;
+            }
+            if (data?.user?.name === debouncedValue) {
                 setResults([]);
                 return;
             }

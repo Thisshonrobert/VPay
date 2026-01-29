@@ -5,12 +5,15 @@ import { useState } from "react";
 import { p2ptransfer } from "../app/lib/action/p2ptransfer";
 import { useMessage } from "hooks/useMessage";
 import Search from "./Search";
+ 
 
 export const SendCard = () => {
   const [amount, setAmount] = useState(0);
   const [selectedNumber, setSelectedNumber] = useState<string | null>(null);
   const [selectedName, setSelectedName] = useState<string | null>(null);
   const { bark } = useMessage();
+  
+
 
   const handleUserSelect = (number: string, name: string) => {
     setSelectedNumber(number);
@@ -51,7 +54,7 @@ export const SendCard = () => {
                     bark({ message: "Please select a user first", success: false });
                     return;
                   }
-                  if (amount <= 0) {
+                  if (amount <= 0 || !amount || isNaN(amount)) {
                     bark({ message: "Please enter a valid amount", success: false });
                     return;
                   }
@@ -59,7 +62,7 @@ export const SendCard = () => {
                   const response = await p2ptransfer(selectedNumber, amount * 100);
                   if (response.status === "success") {
                     bark({ message: response.message, success: true });
-                    setTimeout(() => window.location.reload(), 2000)
+                    
                   }
                   else {
                     bark({ message: response.message, success: false });

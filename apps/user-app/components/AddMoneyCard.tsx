@@ -27,6 +27,9 @@ export const AddMoney = () => {
             if (event.data === 'payment_success') {
                 router.refresh();
             }
+            if (event.data === 'payment_failure') {
+                router.refresh();
+            }
         };
         return () => {
             channel.close();
@@ -55,7 +58,7 @@ export const AddMoney = () => {
                         onClick={async () => {
                             console.log("add money clicked")
                             setLoading(true)
-                            if (amount <= 0) {
+                            if (amount <= 0 || !amount || isNaN(amount)) {
 
                                 bark({ message: "Enter valid Amount", success: false });
                                 return
