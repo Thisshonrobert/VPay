@@ -32,7 +32,34 @@ export default function SignInPage() {
     password: "",
   });
 
+  const validateInputs = () => {
+    if (!form.name || !form.email || !form.phone || !form.password) {
+      bark({ message: "Please fill in all fields", success: false });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      bark({ message: "Please enter a valid email address", success: false });
+      return false;
+    }
+
+    const phoneRegex = /^\d+$/;
+    if (!phoneRegex.test(form.phone)) {
+      bark({ message: "Phone number must contain only digits", success: false });
+      return false;
+    }
+
+    if (form.phone.length < 10) {
+      bark({ message: "Phone number must be at least 10 digits", success: false });
+      return false;
+    }
+
+    return true;
+  };
+
   const onSubmit = async () => {
+    if (!validateInputs()) return;
     setLoading(true);
     try {
       const response = await signIn("credentials", {
@@ -107,7 +134,7 @@ export default function SignInPage() {
       <div className="w-full md:w-1/2 h-full bg-white flex flex-col items-center justify-center p-8 md:p-12 relative animate-in fade-in slide-in-from-right-10 duration-700">
 
         {/* Brand/Logo Placeholder */}
-        
+
 
         <div className="w-full max-w-sm space-y-8">
           <div className="text-center space-y-2">
