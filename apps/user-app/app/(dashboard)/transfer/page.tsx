@@ -9,13 +9,13 @@ import TransferSkeleton from "@components/Skeletons/TransferSkeleton";
 
 
 
- async function TransferPage() {
+async function TransferPage() {
     const balance = await getBalance();
     const transactions = await getRecentOnRampTransactions();
 
-   
 
-    return <div className="w-screen">
+
+    return <div className="w-full p-4 overflow-hidden">
         <div className="text-4xl text-[#6a51a6] pt-8 mb-8 font-bold">
             Transfer
         </div>
@@ -34,11 +34,11 @@ import TransferSkeleton from "@components/Skeletons/TransferSkeleton";
 }
 
 export default function page() {
-  return (
-    <Suspense fallback={<TransferSkeleton />}>
-      <TransferPage />
-    </Suspense>
-  )
+    return (
+        <Suspense fallback={<TransferSkeleton />}>
+            <TransferPage />
+        </Suspense>
+    )
 }
 
 export const dynamic = "force-dynamic";

@@ -21,7 +21,7 @@ export default function LandingPage() {
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 md:px-20 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="flex items-center gap-2">
           <span className="text-2xl font-bold tracking-tight text-[#002970]">
-          <Logo/>
+            <Logo />
           </span>
         </div>
 
@@ -44,7 +44,7 @@ export default function LandingPage() {
             transition={{ duration: 0.6 }}
           >
             <div className="flex items-center gap-2 mb-6">
-             
+
 
             </div>
 
@@ -64,7 +64,7 @@ export default function LandingPage() {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative w-full max-w-[600px] aspect-square"
+            className="relative w-full h-80 md:h-auto md:max-w-[600px] md:aspect-square"
           >
             {/* Abstract Background Blob */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-gradient-to-tr from-[#00baf2]/5 to-transparent rounded-full blur-3xl -z-10" />

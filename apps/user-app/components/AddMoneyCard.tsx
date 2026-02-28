@@ -13,7 +13,7 @@ const SUPPORTED_BANKS = [{
 }];
 
 export const AddMoney = () => {
-    
+
     const router = useRouter();
     const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
     const [amount, setAmount] = useState(0);
@@ -57,19 +57,25 @@ export const AddMoney = () => {
                     <Button disabled={loading}
                         onClick={async () => {
                             console.log("add money clicked")
-                            setLoading(true)
                             if (amount <= 0 || !amount || isNaN(amount)) {
 
                                 bark({ message: "Enter valid Amount", success: false });
                                 return
                             }
+                            setLoading(true)
+
+                            // Synchronously open window to bypass popup blocker
+                            const popup = window.open("", "_blank", "noopener,noreferrer,width=600,height=700");
+
                             const response = await CreateOnRampTxn(provider, (amount * 100));
-                            
+
                             if (response?.paymentToken) {
                                 setLatestToken(response.paymentToken);
                             }
-                            if (response.redirectUrl) {
-                                window.open(response.redirectUrl, "_blank", "noopener,noreferrer,width=600,height=700");
+                            if (response?.redirectUrl && popup) {
+                                popup.location.href = response.redirectUrl;
+                            } else if (popup) {
+                                popup.close();
                             }
                             setLoading(false)
                         }}>
