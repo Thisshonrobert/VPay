@@ -77,7 +77,10 @@ export async function CreateOnRampTxn(provider: string, amount: number) {
       }
     })
 
-    revalidatePath('/dashboard/transfer');
+    // Route groups like (dashboard) don't appear in the URL, so these are the
+    // real paths to revalidate.
+    revalidatePath('/transfer');
+    revalidatePath('/dashboard');
     return {
       message: "Onramp Created",
       paymentToken:paymentToken,

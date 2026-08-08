@@ -1,63 +1,91 @@
-@import '@radix-ui/themes/styles.css';
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   VPay design system — Material Design 3 / Google Pay
+   Colour roles follow Google's product palette (Blue 600, Green 700, Red 600,
+   Yellow 600) over Google Grey neutrals.
+   ========================================================================== */
+
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* --- shadcn/ui token bridge (HSL triplets, consumed as hsl(var(--x))) --- */
+    --background: 210 17% 98%;      /* Google Grey 50  #f8f9fa */
+    --foreground: 225 6% 13%;       /* Google Grey 900 #202124 */
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 225 6% 13%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --popover-foreground: 225 6% 13%;
+    --primary: 214 82% 51%;         /* Google Blue 600 #1a73e8 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 200 12% 95%;       /* Google Grey 100 #f1f3f4 */
+    --secondary-foreground: 225 6% 13%;
+    --muted: 200 12% 95%;
+    --muted-foreground: 213 5% 39%; /* Google Grey 700 #5f6368 */
+    --accent: 214 100% 96%;         /* Blue 50 tint */
+    --accent-foreground: 214 82% 41%;
+    --destructive: 4 71% 50%;       /* Google Red 600 #d93025 */
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 9% 87%;           /* Google Grey 300 #dadce0 */
+    --input: 220 9% 87%;
+    --ring: 214 82% 51%;
+    --radius: 1rem;
+
+    /* --- Google brand hues (hex, for direct use) --- */
+    --gpay-blue: #1a73e8;
+    --gpay-blue-light: #4285f4;
+    --gpay-green: #1e8e3e;
+    --gpay-green-light: #34a853;
+    --gpay-red: #d93025;
+    --gpay-yellow: #f9ab00;
+
+    /* Soft tonal containers — the pastel circles behind GPay's action icons */
+    --gpay-blue-container: #e8f0fe;
+    --gpay-green-container: #e6f4ea;
+    --gpay-red-container: #fce8e6;
+    --gpay-yellow-container: #fef7e0;
+
+    /* --- Chart series --- */
+    --chart-1: 214 82% 51%;
+    --chart-2: 137 65% 34%;
+    --chart-3: 41 100% 49%;
+    --chart-4: 4 71% 50%;
+    --chart-5: 213 5% 39%;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 225 6% 13%;
+    --foreground: 0 0% 98%;
+    --card: 220 5% 18%;
+    --card-foreground: 0 0% 98%;
+    --popover: 220 5% 18%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 217 89% 71%;         /* Blue 300 — M3 lifts primary in dark */
+    --primary-foreground: 225 6% 13%;
+    --secondary: 220 5% 24%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 220 5% 24%;
+    --muted-foreground: 220 9% 70%;
+    --accent: 220 5% 24%;
+    --accent-foreground: 217 89% 71%;
+    --destructive: 4 81% 70%;
+    --destructive-foreground: 225 6% 13%;
+    --border: 220 5% 27%;
+    --input: 220 5% 27%;
+    --ring: 217 89% 71%;
+
+    --gpay-blue: #8ab4f8;
+    --gpay-blue-light: #aecbfa;
+    --gpay-green: #81c995;
+    --gpay-green-light: #a8dab5;
+    --gpay-red: #f28b82;
+    --gpay-yellow: #fdd663;
+
+    --gpay-blue-container: #1f3050;
+    --gpay-green-container: #1f3527;
+    --gpay-red-container: #3f2422;
+    --gpay-yellow-container: #3d3320;
   }
 }
 
@@ -65,7 +93,53 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-sans), Roboto, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Google Sans stands in for headings and currency figures. */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display), var(--font-sans), Arial, sans-serif;
+    letter-spacing: -0.01em;
+  }
+
+  /* Tabular figures keep currency columns from shifting as amounts change. */
+  .tabular {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+}
+
+@layer components {
+  /* GPay's signature: a circular pastel tile behind a line icon. */
+  .gpay-tile {
+    @apply flex items-center justify-center rounded-full shrink-0;
+  }
+
+  /* Material state layer — a translucent wash on hover/press. */
+  .state-layer {
+    @apply relative overflow-hidden transition-colors duration-150;
+  }
+  .state-layer::after {
+    content: "";
+    @apply absolute inset-0 bg-current opacity-0 transition-opacity duration-150 pointer-events-none;
+  }
+  .state-layer:hover::after { @apply opacity-[0.08]; }
+  .state-layer:active::after { @apply opacity-[0.12]; }
+}
+
+/* Respect users who have asked the OS to reduce motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

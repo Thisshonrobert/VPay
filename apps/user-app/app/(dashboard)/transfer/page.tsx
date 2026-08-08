@@ -1,4 +1,3 @@
-
 import { AddMoney } from "@components/AddMoneyCard";
 import { BalanceCard } from "@components/BalanceCard";
 import { OnRampTransactions } from "@components/OnRampTransactions";
@@ -6,31 +5,38 @@ import getBalance from "../../lib/action/getBalance";
 import getRecentOnRampTransactions from "../../lib/action/getRecentOnRampTxn";
 import { Suspense } from "react";
 import TransferSkeleton from "@components/Skeletons/TransferSkeleton";
-
-
+import { getServerSession } from "next-auth";
+import { authOptions } from "app/lib/auth";
+import { redirect } from "next/navigation";
 
 async function TransferPage() {
+    // Guard before querying: the actions derive userId from the session, and a
+    // missing one reaches Prisma as NaN.
+    const session = await getServerSession(authOptions);
+    if (!session) redirect('/signin');
+
     const balance = await getBalance();
     const transactions = await getRecentOnRampTransactions();
 
+    return (
+        <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+            <header className="mb-6">
+                <h1 className="font-display text-headline-md font-medium text-foreground">Add money</h1>
+                <p className="mt-1 text-body-lg text-muted-foreground">
+                    Move funds from your bank into your VPay wallet.
+                </p>
+            </header>
 
-
-    return <div className="w-full p-4 overflow-hidden">
-        <div className="text-4xl text-[#6a51a6] pt-8 mb-8 font-bold">
-            Transfer
-        </div>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
-            <div>
+            <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
                 <AddMoney />
-            </div>
-            <div>
-                <BalanceCard amount={balance.amount} locked={balance.locked} />
-                <div className="pt-4">
+
+                <div className="space-y-6">
+                    <BalanceCard amount={balance.amount} locked={balance.locked} />
                     <OnRampTransactions transactions={transactions} />
                 </div>
             </div>
         </div>
-    </div>
+    );
 }
 
 export default function page() {

@@ -1,63 +1,50 @@
 import React from 'react'
 import { Skeleton } from "ui/components/ui/skeleton"
-import { Card } from "ui/prebuilt/index"
 
 const P2PSkeleton = () => {
   return (
-    <div className="w-full flex flex-row justify-center gap-10">
-      {/* SendCard Skeleton */}
-      <div className="flex justify-center items-center">
-        <Card title="Send">
-          <div className="min-w-72 pt-2 space-y-4">
-            {/* Search Input Skeleton */}
-            <Skeleton className="h-10 w-full rounded-md" />
-            
-            {/* Selected User Info Skeleton */}
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded space-y-2">
-              <Skeleton className="h-4 w-32" />
-              <Skeleton className="h-3 w-24" />
-            </div>
-
-            {/* Amount Input Skeleton */}
-            <div className="space-y-2">
-              <Skeleton className="h-4 w-16" />
-              <Skeleton className="h-10 w-full rounded-md" />
-            </div>
-
-            {/* Button Skeleton */}
-            <Skeleton className="h-10 w-full rounded-md" />
-          </div>
-        </Card>
+    <div className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6 sm:py-8">
+      <div className="mb-6 space-y-2">
+        <Skeleton className="h-8 w-48" />
+        <Skeleton className="h-5 w-72" />
       </div>
 
-      {/* P2pTransactions Skeleton */}
-      <div className="w-1/3 mt-[10%]">
-        <Card title="Recent Transactions">
-          <div className="space-y-4">
-            {/* Header Skeleton */}
-            <div className="flex justify-between pb-4 border-b">
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-4 w-20" />
-              <Skeleton className="h-4 w-20" />
-            </div>
+      <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+        {/* Send card */}
+        <div className="rounded-m3-2xl border border-border bg-card p-5 sm:p-7">
+          <Skeleton className="mb-5 h-6 w-32" />
+          <Skeleton className="h-3.5 w-8" />
+          <Skeleton className="mt-1.5 h-[52px] w-full rounded-full" />
 
-            {/* Transaction Items Skeleton */}
-            {[1, 2, 3, 4, 5].map((item) => (
-              <div key={item} className="flex justify-between py-2 space-y-2">
-                <div className="flex flex-col w-1/3 space-y-1">
-                  <Skeleton className="h-4 w-16" />
-                  <Skeleton className="h-3 w-24" />
-                </div>
-                <div className="w-1/3">
-                  <Skeleton className="h-4 w-20" />
-                </div>
-                <div className="w-1/3">
-                  <Skeleton className="h-4 w-16 ml-auto" />
-                </div>
-              </div>
+          <div className="mt-7 flex flex-col items-center gap-3">
+            <Skeleton className="h-3.5 w-16" />
+            <Skeleton className="h-12 w-48" />
+            <Skeleton className="h-px w-40" />
+          </div>
+
+          <div className="mt-5 flex justify-center gap-2">
+            {[0, 1, 2, 3].map((i) => (
+              <Skeleton key={i} className="h-9 w-20 rounded-full" />
             ))}
           </div>
-        </Card>
+
+          <Skeleton className="mt-7 h-14 w-full rounded-full" />
+        </div>
+
+        {/* People */}
+        <div className="rounded-m3-xl border border-border bg-card p-5 sm:p-6">
+          <Skeleton className="mb-4 h-6 w-24" />
+          {[0, 1, 2, 3].map((i) => (
+            <div key={i} className="flex items-center gap-3 py-3">
+              <Skeleton className="h-9 w-9 rounded-full" />
+              <div className="flex-1 space-y-2">
+                <Skeleton className="h-4 w-28" />
+                <Skeleton className="h-3 w-32" />
+              </div>
+              <Skeleton className="h-5 w-16" />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   )

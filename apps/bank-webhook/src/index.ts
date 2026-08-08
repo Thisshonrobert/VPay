@@ -1,12 +1,20 @@
 import express from "express";
 import db from "@repo/db/client";
+import { expireStaleOnRampTransactions } from "@repo/db/reconcile";
 import cors from "cors";
+import cron from "node-cron";
 
 import swaggerJSDoc from "swagger-jsdoc";
 import { z } from "zod";
 import swaggerUi from 'swagger-ui-express';
 import dotenv from "dotenv";
 dotenv.config();
+
+// How long an onramp transaction may sit in Initiated/Processing before the
+// reconciler fails it and releases the locked funds. Configurable so it can
+// be set to a few minutes for demos instead of waiting a real 24h.
+const ONRAMP_TIMEOUT_MS = Number(process.env.ONRAMP_TIMEOUT_MINUTES ?? 24 * 60) * 60_000;
+const RECONCILE_SECRET = process.env.RECONCILE_SECRET;
 
 
 const app = express();
@@ -209,9 +217,63 @@ app.post("/hdfcWebhook", async (req, res) => {
     }
 
 })
+
+/**
+ * @swagger
+ * /internal/reconcile:
+ *   post:
+ *     summary: Fail onramp transactions stuck in Initiated/Processing past the timeout and release their locked funds.
+ *     description: >
+ *       Runs on an in-process schedule (see cron.schedule below), but is also
+ *       exposed here behind a shared secret so the same logic can be invoked
+ *       externally — e.g. by an AWS EventBridge scheduled rule calling a
+ *       Lambda that hits this endpoint, instead of relying on this process
+ *       staying alive.
+ *     parameters:
+ *       - in: header
+ *         name: x-reconcile-secret
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Reconciliation summary
+ *       401:
+ *         description: Missing or invalid secret
+ */
+app.post("/internal/reconcile", async (req, res) => {
+    if (!RECONCILE_SECRET || req.header("x-reconcile-secret") !== RECONCILE_SECRET) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    try {
+        const result = await expireStaleOnRampTransactions(ONRAMP_TIMEOUT_MS);
+        console.log(`[reconcile] scanned=${result.scanned} expired=${result.expired}`);
+        res.json(result);
+    } catch (error) {
+        console.error("[reconcile] failed:", error);
+        res.status(500).json({ message: "Reconciliation failed" });
+    }
+});
+
 app.listen(3003, () => {
     console.log("Server running at http://localhost:3003");
     console.log("Docs available at http://localhost:3003/api-docs");
+
+    // In-process fallback scheduler for local dev / a single EC2 box. In
+    // production this responsibility can move to AWS EventBridge + Lambda
+    // calling POST /internal/reconcile, which also survives this process
+    // restarting or being scaled to zero.
+    cron.schedule("*/5 * * * *", async () => {
+        try {
+            const result = await expireStaleOnRampTransactions(ONRAMP_TIMEOUT_MS);
+            if (result.expired > 0) {
+                console.log(`[reconcile:cron] scanned=${result.scanned} expired=${result.expired}`);
+            }
+        } catch (error) {
+            console.error("[reconcile:cron] failed:", error);
+        }
+    });
 });
 
 

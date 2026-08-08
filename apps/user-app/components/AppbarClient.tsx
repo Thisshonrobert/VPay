@@ -1,23 +1,29 @@
 "use client"
 import { signOut, useSession } from "next-auth/react";
-import {  usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Appbar } from "ui/prebuilt/index";
+
+// Routes that render their own full-bleed chrome and shouldn't show the app bar.
+const BARE_ROUTES = ["/signin", "/", "/bankfrontend", "/success"];
 
 export function AppbarClient() {
   const session = useSession();
   const router = useRouter();
   const pathname = usePathname();
-  if(pathname === "/signin" || pathname === '/' || pathname==='/bankfrontend' || pathname==='/success'){
-    return <div></div>
+
+  if (BARE_ROUTES.includes(pathname)) {
+    return null;
   }
+
   return (
-   <div className="bg-slate-50">
-      <Appbar onLogoClick={()=>router.push("/dashboard")} onSignin={()=>router.push("/auth/signin")} onSignout={async () => {
-        await signOut({redirect:false})
-        router.push("/signin")
-       
-      }} 
-      user={session.data?.user} />
-   </div>
+    <Appbar
+      onLogoClick={() => router.push("/dashboard")}
+      onSignin={() => router.push("/signin")}
+      onSignout={async () => {
+        await signOut({ redirect: false });
+        router.push("/signin");
+      }}
+      user={session.data?.user}
+    />
   );
 }

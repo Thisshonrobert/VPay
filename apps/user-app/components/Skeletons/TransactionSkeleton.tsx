@@ -1,63 +1,34 @@
 import React from 'react'
 import { Skeleton } from "ui/components/ui/skeleton"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "ui"
 
 const TransactionSkeleton = () => {
   return (
-    <div className="mr-10 mt-6 w-full">
-      <Card className="xl:col-span-2" x-chunk="dashboard-01-chunk-4">
-        <CardHeader className="flex flex-row items-center">
-          <div className="grid gap-2">
-            <CardTitle>
-              <Skeleton className="h-6 w-32" />
-            </CardTitle>
-            <CardDescription>
-              <Skeleton className="h-4 w-48" />
-            </CardDescription>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>
-                  <Skeleton className="h-4 w-20" />
-                </TableHead>
-                <TableHead>
-                  <Skeleton className="h-4 w-16" />
-                </TableHead>
-                <TableHead>
-                  <Skeleton className="h-4 w-12" />
-                </TableHead>
-                <TableHead className="text-right">
-                  <Skeleton className="h-4 w-20 ml-auto" />
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {[1, 2, 3, 4, 5, 6].map((item) => (
-                <TableRow key={item}>
-                  <TableCell>
-                    <div className="space-y-2">
-                      <Skeleton className="h-4 w-32" />
-                      <Skeleton className="h-3 w-40" />
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-6 w-20 rounded-full" />
-                  </TableCell>
-                  <TableCell>
-                    <Skeleton className="h-4 w-24" />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <Skeleton className="h-4 w-20 ml-auto" />
-                  </TableCell>
-                </TableRow>
+    <div className="mx-auto w-full max-w-3xl px-4 py-6 sm:px-6 sm:py-8">
+      <div className="mb-6 space-y-2">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-5 w-64" />
+      </div>
+
+      <div className="space-y-6">
+        {[0, 1].map((group) => (
+          <div key={group}>
+            <Skeleton className="mb-2 h-4 w-24" />
+            <div className="overflow-hidden rounded-m3-xl border border-border bg-card p-4">
+              {[0, 1, 2].map((row) => (
+                <div key={row} className="flex items-center gap-4 py-3.5">
+                  <Skeleton className="h-11 w-11 rounded-full" />
+                  <div className="flex-1 space-y-2">
+                    <Skeleton className="h-4 w-36" />
+                    <Skeleton className="h-3 w-48" />
+                  </div>
+                  <Skeleton className="hidden h-6 w-20 rounded-full sm:block" />
+                  <Skeleton className="h-5 w-20" />
+                </div>
               ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }

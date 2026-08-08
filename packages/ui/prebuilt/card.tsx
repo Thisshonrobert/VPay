@@ -2,19 +2,35 @@ import React from "react";
 
 export function Card({
   title,
+  subtitle,
+  action,
   children,
+  className = "",
 }: {
-  title: React.ReactNode;
+  title?: React.ReactNode;
+  subtitle?: React.ReactNode;
+  action?: React.ReactNode;
   children?: React.ReactNode;
+  className?: string;
 }): JSX.Element {
   return (
-    <div
-      className="border p-6 font-sans font-medium rounded-xl bg-white"
+    <section
+      className={`rounded-m3-xl border border-border bg-card p-5 shadow-m3-1 sm:p-6 ${className}`}
     >
-      <h1 className="text-2xl border-b pb-2 text-purple-900 font-semibold">
-        {title}
-      </h1>
-      <div>{children}</div>
-    </div>
+      {(title || action) && (
+        <header className="mb-4 flex items-start justify-between gap-4">
+          <div>
+            {title && (
+              <h2 className="font-display text-title-lg text-card-foreground">{title}</h2>
+            )}
+            {subtitle && (
+              <p className="mt-0.5 text-body-md text-muted-foreground">{subtitle}</p>
+            )}
+          </div>
+          {action}
+        </header>
+      )}
+      {children}
+    </section>
   );
 }

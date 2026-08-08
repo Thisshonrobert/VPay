@@ -3,34 +3,30 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Label } from 'ui';
-import { motion } from 'framer-motion';
-import { Playfair_Display, Inter } from 'next/font/google';
 import { useMessage } from 'hooks/useMessage';
 import { Logo } from 'ui/prebuilt/Logo';
 
-// Load fonts
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-playfair',
-});
+type Field = {
+  id: 'name' | 'email' | 'phone' | 'password';
+  label: string;
+  type: string;
+  placeholder: string;
+  autoComplete: string;
+  inputMode?: 'text' | 'email' | 'tel';
+};
 
-const inter = Inter({
-  subsets: ['latin'],
-  variable: '--font-inter',
-});
+const FIELDS: Field[] = [
+  { id: 'name', label: 'Full name', type: 'text', placeholder: 'Alice Kumar', autoComplete: 'name' },
+  { id: 'email', label: 'Email', type: 'email', placeholder: 'alice@example.com', autoComplete: 'email', inputMode: 'email' },
+  { id: 'phone', label: 'Mobile number', type: 'tel', placeholder: '9876543210', autoComplete: 'tel', inputMode: 'tel' },
+  { id: 'password', label: 'Password', type: 'password', placeholder: '••••••••', autoComplete: 'current-password' },
+];
 
 export default function SignInPage() {
   const router = useRouter();
   const { bark } = useMessage();
   const [loading, setLoading] = useState(false);
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", phone: "", password: "" });
 
   const validateInputs = () => {
     if (!form.name || !form.email || !form.phone || !form.password) {
@@ -72,13 +68,10 @@ export default function SignInPage() {
       });
 
       if (response?.ok) {
-        bark({ message: "Successfully Logged In", success: true });
+        bark({ message: "Successfully logged in", success: true });
         router.push("/dashboard");
       } else {
-        bark({
-          message: "Unable to login. Please enter valid credentials",
-          success: false,
-        });
+        bark({ message: "Unable to login. Please enter valid credentials", success: false });
         console.error("Login failed:", response?.error);
       }
     } catch (error) {
@@ -90,136 +83,68 @@ export default function SignInPage() {
   };
 
   return (
-    <div className={`w-full h-screen flex flex-col md:flex-row bg-white overflow-hidden ${inter.variable} ${playfair.variable} font-sans`}>
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+      {/* Google's account card: generous radius, hairline border, no heavy shadow. */}
+      <div className="w-full max-w-[460px] animate-rise-in rounded-m3-2xl border border-border bg-card px-6 py-10 shadow-m3-1 sm:px-12">
 
-      {/* Left Panel - Image & Abstract Art */}
-      <div className="relative w-full md:w-1/2 h-full bg-black flex flex-col justify-end p-8 md:p-16 overflow-hidden">
-        {/* Background Image */}
-        <img
-          src="/signinPage.avif"
-          className="absolute inset-0 w-full h-full object-cover opacity-80"
-          alt="Background"
-        />
-
-        {/* Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-        {/* Content */}
-        <motion.div
-          className="relative z-10 text-white space-y-4 max-w-lg mb-12"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="flex items-center space-x-2 text-sm uppercase tracking-widest text-white/70 mb-2">
-            <span className="h-[1px] w-8 bg-white/50 inline-block"></span>
-            <span>Digital Wallet Experience</span>
-          </div>
-
-          <h1 className="text-5xl md:text-6xl font-serif font-medium leading-tight tracking-tight">
-            Send Money <br />
-            <span className="italic">Instantly</span> <br />
-            With Confidence
+        <div className="flex flex-col items-center text-center">
+          <Logo />
+          <h1 className="mt-6 font-display text-headline-md font-normal text-foreground">
+            Sign in
           </h1>
-
-          <p className="text-white/70 text-lg font-light pt-4 border-l-2 border-white/30 pl-4 mt-6">
-            Experience payments smarter with VPay's secure infrastructure, instant transfers,
-            and seamless integration — designed to simplify your financial life.
+          <p className="mt-2 text-body-lg text-muted-foreground">
+            Continue to your VPay wallet
           </p>
-        </motion.div>
-
-      </div>
-
-      {/* Right Panel - Login Form */}
-      <div className="w-full md:w-1/2 h-full bg-white flex flex-col items-center justify-center p-8 md:p-12 relative animate-in fade-in slide-in-from-right-10 duration-700">
-
-        {/* Brand/Logo Placeholder */}
-
-
-        <div className="w-full max-w-sm space-y-8">
-          <div className="text-center space-y-2">
-            <h2 className="text-4xl font-serif font-medium text-gray-900">Welcome</h2>
-            <p className="text-gray-500 font-light">
-              Sign in to access your wallet.
-            </p>
-          </div>
-
-          <div className="space-y-4 pt-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                type="text"
-                placeholder="Alice"
-                required
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="h-12 rounded-xl bg-gray-50 border-gray-200 focus:border-slate-800 transition-colors"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="alice@example.com"
-                required
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-                className="h-12 rounded-xl bg-gray-50 border-gray-200 focus:border-slate-800 transition-colors"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="phone">Number</Label>
-              <Input
-                id="phone"
-                type="text"
-                placeholder="1234567890"
-                required
-                value={form.phone}
-                onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                className="h-12 rounded-xl bg-gray-50 border-gray-200 focus:border-slate-800 transition-colors"
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                required
-                value={form.password}
-                onChange={(e) => setForm({ ...form, password: e.target.value })}
-                className="h-12 rounded-xl bg-gray-50 border-gray-200 focus:border-slate-800 transition-colors"
-              />
-            </div>
-
-            <Button
-              variant="default"
-              onClick={onSubmit}
-              disabled={loading}
-              className="w-full h-14 text-base font-medium rounded-xl bg-black text-white hover:bg-gray-800 transition-all shadow-lg flex items-center justify-center gap-3 mt-6"
-            >
-              {loading ? (
-                <span className="w-5 h-5 border-2 border-gray-500 border-t-white rounded-full animate-spin" />
-              ) : (
-                <span>Signup / Login</span>
-              )}
-            </Button>
-
-            <p className="text-center text-xs text-gray-400 mt-4">
-              By logging in you are accepting terms and conditions
-            </p>
-          </div>
         </div>
 
-        {/* Footer info/links - Optional, keeping somewhat minimal as per VPay style */}
-        <div className="absolute bottom-6 text-xs text-gray-300 flex space-x-4">
-          <span>Terms</span>
-          <span>Privacy</span>
-        </div>
+        <form
+          className="mt-8 space-y-5"
+          onSubmit={(e) => { e.preventDefault(); onSubmit(); }}
+        >
+          {FIELDS.map((field) => (
+            <div key={field.id}>
+              <label
+                htmlFor={field.id}
+                className="mb-1.5 block text-label-lg text-muted-foreground"
+              >
+                {field.label}
+              </label>
+              <input
+                id={field.id}
+                type={field.type}
+                inputMode={field.inputMode}
+                autoComplete={field.autoComplete}
+                placeholder={field.placeholder}
+                value={form[field.id]}
+                onChange={(e) => setForm({ ...form, [field.id]: e.target.value })}
+                className="w-full rounded-m3-md border border-border bg-card px-4 py-3.5 text-body-lg
+                  text-foreground outline-none transition-all duration-150
+                  placeholder:text-muted-foreground/60
+                  focus:border-primary focus:ring-1 focus:ring-primary"
+              />
+            </div>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            aria-busy={loading || undefined}
+            className="state-layer mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-primary
+              px-6 py-4 text-label-lg text-primary-foreground shadow-m3-1 transition-all hover:shadow-m3-2
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2
+              disabled:pointer-events-none disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
+          >
+            {loading && (
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true" />
+            )}
+            {loading ? "Signing in…" : "Sign in"}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-body-sm text-muted-foreground">
+          New here? Signing in creates your wallet automatically.
+        </p>
       </div>
     </div>
   );
 }
-

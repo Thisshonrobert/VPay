@@ -10,7 +10,8 @@
     },
     "exports": {
         "./client": "./index.ts",
-        "./clientbuilt":"./dist/index.js"
+        "./clientbuilt":"./dist/index.js",
+        "./reconcile": "./reconcile.ts"
     },
     "scripts": {
         "build": "tsc"

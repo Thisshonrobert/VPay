@@ -1,11 +1,7 @@
 'use client';
 
-import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from 'ui';
-import hdfc from '../../public/hdfc.png'
-
 
 interface PaymentData {
   userId: number;
@@ -30,12 +26,8 @@ export function BankContent() {
     }
 
     try {
-      // Decode the token from base64
       const decoded = Buffer.from(token, 'base64').toString('utf-8');
-
       const data = JSON.parse(decoded) as PaymentData;
-
-
       setPaymentData(data);
     } catch (err) {
       setError('Invalid payment token');
@@ -66,7 +58,6 @@ export function BankContent() {
       }
 
       const result = await response.json();
-      console.log('Payment result:', result);
 
       if (success && result.message === 'Captured') {
         const params = new URLSearchParams({
@@ -87,179 +78,117 @@ export function BankContent() {
       channel.close();
       console.error('Payment error:', err);
       setLoading(false);
-
     }
   };
 
   if (error) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-2xl text-red-600">Error</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-red-600 mb-4">{error}</p>
-
-          </CardContent>
-        </Card>
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="w-full max-w-md rounded-m3-2xl border border-border bg-card p-8 text-center shadow-m3-1">
+          <span className="gpay-tile mx-auto mb-4 h-14 w-14 bg-gpay-red-container text-gpay-red">
+            <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+            </svg>
+          </span>
+          <h1 className="font-display text-title-lg text-foreground">Something went wrong</h1>
+          <p className="mt-2 text-body-lg text-muted-foreground">{error}</p>
+        </div>
       </div>
     );
   }
 
   if (!paymentData) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gray-50">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle>Loading Payment Details</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="animate-pulse space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <span
+          className="h-8 w-8 animate-spin rounded-full border-[3px] border-primary border-t-transparent"
+          aria-label="Loading payment details"
+        />
       </div>
     );
   }
 
-  const displayAmount = (Number(paymentData.amount) / 100).toFixed(2);
+  const displayAmount = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+  }).format(Number(paymentData.amount) / 100);
 
   return (
-    <div className="flex justify-center items-center min-h-screen  from-blue-50 to-white p-4">
-      <div className="w-full max-w-2xl">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Welcome to HDFC Bank NetBanking</h1>
-          <div className="flex justify-center gap-4 items-center">
-            <span className="text-sm font-semibold text-gray-600">Secured by</span>
-            <Image
-              src={hdfc}
-              alt='HDFC'
-              width={50}
-              height={50}
-            />
-          </div>
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+      <div className="w-full max-w-[520px] animate-rise-in">
+
+        {/* This screen stands in for the bank's netbanking redirect. Label it
+            plainly so it can never be mistaken for a real bank page. */}
+        <div className="mb-4 flex items-start gap-3 rounded-m3-lg border border-gpay-yellow/40 bg-gpay-yellow-container px-4 py-3">
+          <svg className="mt-0.5 h-5 w-5 shrink-0 text-gpay-yellow" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+          </svg>
+          <p className="text-body-md text-foreground">
+            <span className="font-medium">Simulated payment gateway.</span>{' '}
+            This is a sandbox screen in the VPay demo — no real bank, account or money is involved.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Main Payment Card */}
-          <div className="lg:col-span-2">
-            <Card className="border-0 shadow-lg">
-              <CardHeader className="bg-gradient-to-r bg-white text-white rounded-t-lg">
-                <CardTitle className="text-2xl">Confirm Payment</CardTitle>
-                <CardDescription >
-                  VPay Wallet Top-up via NetBanking
-                </CardDescription>
-              </CardHeader>
+        <div className="overflow-hidden rounded-m3-2xl border border-border bg-card shadow-m3-2">
+          <header className="border-b border-border px-6 py-5">
+            <p className="text-label-lg uppercase tracking-wider text-muted-foreground">
+              Mock netbanking
+            </p>
+            <h1 className="mt-1 font-display text-title-lg text-foreground">
+              Confirm your wallet top-up
+            </h1>
+          </header>
 
-              <CardContent className="space-y-8 pt-8">
-                {/* Amount Section */}
-                <div className="border-2 border-blue-200 rounded-lg p-6 bg-blue-50">
-                  <p className="text-sm text-gray-600 font-semibold mb-2 uppercase tracking-wide">Payment Amount</p>
-                  <p className="text-5xl font-bold text-blue-600">₹{displayAmount}</p>
-                  <p className="text-xs text-gray-500 mt-2">This amount will be debited from your account</p>
-                </div>
-
-                {/* Payment Details */}
-                <div className="space-y-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Payment Details</h3>
-
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">Transaction ID</p>
-                    <p className="text-lg font-mono font-semibold text-gray-800">{paymentData.refId}</p>
-                  </div>
-
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <p className="text-xs text-gray-500 uppercase tracking-wide mb-2">User ID</p>
-                    <p className="text-lg font-semibold text-gray-800">{paymentData.userId}</p>
-                  </div>
-                </div>
-
-                {/* Warning */}
-                <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
-                  <p className="text-sm text-yellow-800 flex items-start gap-3">
-                    <span className="text-xl">⚠️</span>
-                    <span>
-                      Please verify all details carefully. Once confirmed, the payment cannot be reversed.
-                      Ensure you are on the official HDFC Bank website.
-                    </span>
-                  </p>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="grid grid-cols-2 gap-4 pt-4">
-                  <Button
-                    onClick={() => handlePayment(false)}
-                    disabled={loading}
-                    variant="outline"
-                    className="w-full py-3 text-lg font-semibold border-2 hover:bg-red-50"
-                  >
-                    {loading ? 'Processing...' : 'Decline'}
-                  </Button>
-                  <Button
-                    onClick={() => handlePayment(true)}
-                    disabled={loading}
-                    className="w-full py-3 text-lg font-semibold bg-purple-800 hover:bg-puple-900 text-white"
-                  >
-                    {loading ? 'Processing...' : 'Accept & Pay'}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Amount */}
+          <div className="px-6 py-8 text-center">
+            <p className="text-label-lg uppercase tracking-wider text-muted-foreground">
+              Amount
+            </p>
+            <p className="tabular mt-2 font-display text-display-sm font-semibold text-foreground">
+              {displayAmount}
+            </p>
+            <p className="mt-2 text-body-md text-muted-foreground">
+              Will be credited to your VPay wallet
+            </p>
           </div>
 
-          {/* Security Sidebar */}
-          <div className="space-y-4">
-            {/* Norton Security */}
-            <Card className="border-0 shadow-md">
-              <CardContent className="pt-6">
-                <div className="text-center space-y-3">
-                  <svg className="w-16 h-16 mx-auto" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="48" fill="#00AA44" opacity="0.1" stroke="#00AA44" strokeWidth="2" />
-                    <path d="M 35 50 L 45 60 L 65 40" stroke="#00AA44" strokeWidth="4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <div>
-                    <p className="font-semibold text-gray-800">Norton Secured</p>
-                    <p className="text-xs text-gray-600">powered by Symantec</p>
-                  </div>
-                  <p className="text-xs text-gray-600">Your security is of utmost importance</p>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Details */}
+          <dl className="divide-y divide-border border-t border-border px-6">
+            <div className="flex items-baseline justify-between gap-4 py-4">
+              <dt className="text-body-md text-muted-foreground">Reference ID</dt>
+              <dd className="font-mono text-body-lg text-foreground">{paymentData.refId}</dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-4 py-4">
+              <dt className="text-body-md text-muted-foreground">Payee</dt>
+              <dd className="text-body-lg text-foreground">VPay Wallet</dd>
+            </div>
+          </dl>
 
-            {/* Tips */}
-            <Card className="border-0 shadow-md bg-blue-50">
-              <CardHeader>
-                <CardTitle className="text-base">Security Tips</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 text-sm">
-                <div className="flex gap-2">
-                  <span className="text-blue-600 font-bold">✓</span>
-                  <span className="text-gray-700">Never share your password with anyone</span>
-                </div>
-                <div className="flex gap-2">
-                  <span className="text-blue-600 font-bold">✓</span>
-                  <span className="text-gray-700">Logout after every session</span>
-                </div>
-                <div className="flex gap-2">
-                  <span className="text-blue-600 font-bold">✓</span>
-                  <span className="text-gray-700">Check URL before entering details</span>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="text-center mt-12 text-xs text-gray-600 space-y-2">
-          <p>© Copyright HDFC Bank Ltd. | All Rights Reserved.</p>
-          <div className="flex justify-center gap-4">
-            <a href="#" className="hover:text-blue-600">Terms and Conditions</a>
-            <a href="#" className="hover:text-blue-600">Privacy Policy</a>
-            <a href="#" className="hover:text-blue-600">Security</a>
+          {/* Actions */}
+          <div className="flex flex-col-reverse gap-3 border-t border-border px-6 py-5 sm:flex-row">
+            <button
+              type="button"
+              onClick={() => handlePayment(false)}
+              disabled={loading}
+              className="state-layer flex-1 rounded-full border border-border px-6 py-3.5 text-label-lg text-foreground
+                transition-colors hover:bg-secondary disabled:pointer-events-none disabled:opacity-50"
+            >
+              Decline
+            </button>
+            <button
+              type="button"
+              onClick={() => handlePayment(true)}
+              disabled={loading}
+              aria-busy={loading || undefined}
+              className="state-layer flex flex-1 items-center justify-center gap-2 rounded-full bg-primary px-6 py-3.5
+                text-label-lg text-primary-foreground shadow-m3-1 transition-shadow hover:shadow-m3-2
+                disabled:pointer-events-none disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
+            >
+              {loading && (
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" aria-hidden="true" />
+              )}
+              {loading ? 'Processing…' : 'Approve payment'}
+            </button>
           </div>
         </div>
       </div>

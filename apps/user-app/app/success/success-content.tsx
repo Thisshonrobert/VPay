@@ -1,7 +1,8 @@
 'use client';
 
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { Logo } from 'ui/prebuilt/Logo';
 
 interface SuccessData {
   amount: string;
@@ -11,12 +12,10 @@ interface SuccessData {
 
 export function SuccessContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [successData, setSuccessData] = useState<SuccessData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get data from URL params or session storage
     const amount = searchParams.get('amount');
     const refId = searchParams.get('refId');
     const userId = searchParams.get('userId');
@@ -28,6 +27,7 @@ export function SuccessContent() {
         userId: Number(userId),
       });
 
+      // Tell the opener tab to refresh its balance.
       const channel = new BroadcastChannel('payment_channel');
       channel.postMessage('payment_success');
       channel.close();
@@ -36,7 +36,12 @@ export function SuccessContent() {
     setLoading(false);
   }, [searchParams]);
 
-  const displayAmount = successData ? (Number(successData.amount) / 100).toFixed(2) : '0.00';
+  const displayAmount = successData
+    ? new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(
+      Number(successData.amount) / 100
+    )
+    : '₹0.00';
+
   const timestamp = new Date().toLocaleString('en-IN', {
     year: 'numeric',
     month: 'short',
@@ -47,79 +52,69 @@ export function SuccessContent() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-white">
-        <div className="text-center">Loading...</div>
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <span
+          className="h-8 w-8 animate-spin rounded-full border-[3px] border-primary border-t-transparent"
+          aria-label="Loading"
+        />
       </div>
     );
   }
 
+  const rows = [
+    { label: 'Transaction ID', value: successData?.refId, mono: true },
+    { label: 'Paid to', value: 'VPay Wallet top-up' },
+    { label: 'Date & time', value: timestamp },
+  ];
+
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-b from-green-50 to-white p-4">
-      <div className="w-full max-w-md space-y-8">
-        {/* Success Icon */}
-        <div className="flex justify-center">
-          <div className="relative w-24 h-24">
-            <div className="absolute inset-0 bg-green-100 rounded-full flex items-center justify-center animate-pulse">
-              <svg className="w-12 h-12 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
+      <div className="w-full max-w-[440px] animate-rise-in">
+
+        {/* Receipt */}
+        <div className="overflow-hidden rounded-m3-2xl border border-border bg-card shadow-m3-2">
+
+          {/* Green header — the universal "it worked" signal. */}
+          <div className="flex flex-col items-center gap-4 bg-gpay-green-container px-6 py-10 text-center">
+            <span className="flex h-20 w-20 animate-scale-in items-center justify-center rounded-full bg-gpay-green text-white shadow-m3-1">
+              <svg className="h-10 w-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
               </svg>
-            </div>
-          </div>
-        </div>
+            </span>
 
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Paid For Order</h1>
-          <p className="text-gray-500">Payment successful</p>
-        </div>
-
-        {/* Amount */}
-        <div className="text-center bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-          <p className="text-5xl font-bold text-gray-800 mb-2">₹{displayAmount}</p>
-          <p className="text-lg text-green-600 font-semibold">Paid Successfully</p>
-        </div>
-
-        {/* Transaction Details */}
-        <div className="space-y-4 bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-          {/* Wallet Icon + Transaction ID */}
-          <div className="flex items-center justify-center gap-3 py-4 border-b border-gray-200">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M13 6v2h-2V6h2m0 12h-2v-2h2v2m6-6h2v2h-2v-2M8 6h2v2H8V6m-4 4h2v2H4v-2m0 8h2v2H4v-2m8-2h2v2h-2v-2m4-4h2v2h-2v-2z" />
-              </svg>
-            </div>
-            <div className="text-center">
-              <p className="text-sm text-gray-600">VPay Wallet</p>
-              <p className="text-lg font-semibold text-gray-800">Top-up</p>
+            <div>
+              <p className="font-display text-title-lg text-gpay-green">Payment successful</p>
+              <p className="tabular mt-2 font-display text-display-sm font-semibold text-foreground">
+                {displayAmount}
+              </p>
             </div>
           </div>
 
-          {/* Transaction ID */}
-          <div className="py-3 border-b border-gray-200">
-            <p className="text-xs text-gray-600 uppercase tracking-wide mb-1">Transaction ID</p>
-            <p className="text-base font-mono font-semibold text-gray-800">{successData?.refId}</p>
-          </div>
+          {/* Details */}
+          <dl className="divide-y divide-border px-6">
+            {rows.map((row) => (
+              <div key={row.label} className="flex items-baseline justify-between gap-4 py-4">
+                <dt className="text-body-md text-muted-foreground">{row.label}</dt>
+                <dd className={`text-body-lg text-foreground ${row.mono ? 'font-mono' : ''}`}>
+                  {String(row.value ?? '—')}
+                </dd>
+              </div>
+            ))}
+          </dl>
 
-          {/* User ID */}
-          <div className="py-3 border-b border-gray-200">
-            <p className="text-xs text-gray-600 uppercase tracking-wide mb-1">User ID</p>
-            <p className="text-base font-semibold text-gray-800">{successData?.userId}</p>
-          </div>
-
-          {/* Timestamp */}
-          <div className="py-3">
-            <p className="text-xs text-gray-600 uppercase tracking-wide mb-1">Date & Time</p>
-            <p className="text-base text-gray-800">{timestamp}</p>
+          <div className="px-6 pb-6 pt-2">
+            <button
+              type="button"
+              onClick={() => window.close()}
+              className="state-layer w-full rounded-full bg-primary px-6 py-3.5 text-label-lg text-primary-foreground shadow-m3-1 transition-shadow hover:shadow-m3-2"
+            >
+              Done
+            </button>
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="text-center text-xs text-gray-600 space-y-1">
-          <p>© Copyright VPay Bank Ltd. | All Rights Reserved.</p>
-          <div className="flex justify-center gap-3 text-gray-500">
-            <a href="#" className="hover:text-blue-600">Privacy Policy</a>
-            <a href="#" className="hover:text-blue-600">Terms & Conditions</a>
-          </div>
+        <div className="mt-6 flex items-center justify-center gap-2 opacity-70">
+          <Logo />
         </div>
       </div>
     </div>
